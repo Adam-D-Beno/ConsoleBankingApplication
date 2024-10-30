@@ -2,29 +2,31 @@ package org.das.service;
 
 import org.das.model.Account;
 
+import java.util.UUID;
+
 public class AccountServiceImpl implements AccountService {
     @Override
-    public Account accountCreate() {
-        return null;
+    public Account accountCreate(UUID userId) {
+        return new Account(userId);
     }
 
     @Override
-    public boolean accountClose() {
+    public boolean accountClose(UUID accountId) {
         return false;
     }
 
     @Override
-    public boolean accountDeposit() {
+    public boolean accountDeposit(UUID accountId, double amount) {
         return false;
     }
 
     @Override
-    public boolean accountTransfer() {
+    public boolean accountTransfer(UUID senderId, UUID recipientId, double amount) {
         return false;
     }
 
     @Override
-    public boolean accountWithdraw() {
+    public boolean accountWithdraw(UUID accountId, double amount) {
         return false;
     }
 }
