@@ -1,26 +1,33 @@
 package org.das;
 
-import org.springframework.context.ApplicationContext;
+import org.das.model.Account;
+import org.das.service.AccountService;
+import org.das.service.UserService;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import java.util.Scanner;
 
-import java.lang.annotation.Annotation;
-
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
 public class OperationsConsoleListener {
     public static void main(String[] args) {
+
         AnnotationConfigApplicationContext context =
                 new AnnotationConfigApplicationContext("org.das");
+        AccountService accountService = context.getBean(AccountService.class);
+        UserService userService = context.getBean(UserService.class);
+        Scanner scanner = new Scanner(System.in);
 
         while (true) {
-            System.out.println("-ACCOUNT_CREATE\n" +
-                    "-SHOW_ALL_USERS\n" +
-                    "-ACCOUNT_CLOSE\n" +
-                    "-ACCOUNT_WITHDRAW\n" +
-                    "-ACCOUNT_DEPOSIT\n" +
-                    "-ACCOUNT_TRANSFER\n" +
-                    "-USER_CREATE");
+            System.out.println("""
+                     Please enter one of operation type:
+                    -ACCOUNT_CREATE
+                    -SHOW_ALL_USERS
+                    -ACCOUNT_CLOSE
+                    -ACCOUNT_WITHDRAW
+                    -ACCOUNT_DEPOSIT
+                    -ACCOUNT_TRANSFER
+                    -USER_CREATE""");
 
+            String userEnter = scanner.nextLine();
+            System.out.println(userEnter);
         }
     }
 }
