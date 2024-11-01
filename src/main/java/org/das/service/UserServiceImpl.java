@@ -11,7 +11,7 @@ import java.util.Map;
 @Service
 public class UserServiceImpl implements UserService {
     private final Map<String, User> userMap;
-    private final AccountServiceImpl accountService;
+    private final AccountService accountService;
 
     @Autowired
     public UserServiceImpl(AccountServiceImpl accountService) {
