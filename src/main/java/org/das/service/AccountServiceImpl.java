@@ -1,9 +1,10 @@
 package org.das.service;
 
 import org.das.model.Account;
-
+import org.springframework.stereotype.Service;
 import java.util.UUID;
 
+@Service
 public class AccountServiceImpl implements AccountService {
     @Override
     public Account accountCreate(UUID userId) {
