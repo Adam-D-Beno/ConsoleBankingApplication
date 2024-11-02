@@ -1,11 +1,12 @@
 package org.das.model;
 
+import java.math.BigDecimal;
 import java.util.UUID;
 
 public class Account {
-    private UUID accountId;
-    private UUID userId;
-    private double moneyAmount;
+    private final UUID accountId;
+    private final UUID userId;
+    private BigDecimal moneyAmount;
 
     public Account(UUID userId) {
         this.userId = userId;
@@ -20,15 +21,15 @@ public class Account {
         return userId;
     }
 
-    public double getMoneyAmount() {
+    public BigDecimal getMoneyAmount() {
         return moneyAmount;
     }
 
-    public void increaseAmount(double amount) {
-        moneyAmount += amount;
+    public void increaseAmount(BigDecimal amount) {
+        this.moneyAmount = moneyAmount.add(amount);
     }
-    public void decreaseAmount(double amount) {
-        moneyAmount += amount;
+    public void decreaseAmount(BigDecimal amount) {
+        this.moneyAmount = moneyAmount.subtract(amount);
     }
 
     @Override
