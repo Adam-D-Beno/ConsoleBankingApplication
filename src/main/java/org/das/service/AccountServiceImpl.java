@@ -5,6 +5,8 @@ import org.das.model.Account;
 import org.das.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.math.BigDecimal;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -32,7 +34,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void accountDeposit(UUID accountId, double amount) {
+    public void accountDeposit(UUID accountId, BigDecimal amount) {
         Account account = findAccountById(accountId)
                 .orElseThrow(() -> new RuntimeException("Account not exist"));
         account.increaseAmount(amount);
@@ -40,7 +42,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void accountTransfer(UUID senderId, UUID recipientId, double amount) {
+    public void accountTransfer(UUID senderId, UUID recipientId, BigDecimal amount) {
         Account sender = findAccountById(senderId)
                 .orElseThrow(() -> new RuntimeException("Account senderId not exist"));
 
@@ -52,9 +54,10 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void accountWithdraw(UUID accountId, double amount) {
+    public void accountWithdraw(UUID accountId, BigDecimal amount) {
         Account account = findAccountById(accountId)
                 .orElseThrow(() -> new RuntimeException("Account not exist"));
+
         account.decreaseAmount(amount);
     }
 
