@@ -1,9 +1,8 @@
 package org.das.model;
 
-import org.springframework.stereotype.Component;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -33,6 +32,10 @@ public class User {
 
     public void setAccounts(Account account) {
         this.accounts.add(account);
+    }
+
+    public Optional<Account> getAccountById(UUID accountId) {
+        return accounts.stream().filter(account -> account.getAccountId().equals(accountId)).findFirst();
     }
 
     @Override
