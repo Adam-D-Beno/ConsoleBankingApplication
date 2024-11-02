@@ -24,6 +24,13 @@ public class Account {
         return moneyAmount;
     }
 
+    public void increaseAmount(double amount) {
+        moneyAmount += amount;
+    }
+    public void decreaseAmount(double amount) {
+        moneyAmount += amount;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
