@@ -32,7 +32,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void accountDeposit(UUID accountId, double amount) {
         Account account = findAccountById(accountId)
-                .orElseThrow(() -> new RuntimeException("Account not exist"));;
+                .orElseThrow(() -> new RuntimeException("Account not exist"));
         account.increaseAmount(amount);
 
     }
@@ -45,7 +45,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void accountWithdraw(UUID accountId, double amount) {
         Account account = findAccountById(accountId)
-                .orElseThrow(() -> new RuntimeException("Account not exist"));;
+                .orElseThrow(() -> new RuntimeException("Account not exist"));
         account.decreaseAmount(amount);
     }
 
