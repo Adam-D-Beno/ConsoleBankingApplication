@@ -6,8 +6,8 @@ import java.util.UUID;
 
 public interface AccountService {
     Account accountCreate(UUID userId);
-    boolean accountClose(UUID accountId);
+    void accountClose(UUID accountId);
     void accountDeposit(UUID accountId, double amount);
-    boolean accountTransfer(UUID senderId, UUID recipientId, double amount);
+    void accountTransfer(UUID senderId, UUID recipientId, double amount);
     void accountWithdraw(UUID accountId, double amount);
 }
