@@ -5,10 +5,10 @@ import org.das.model.Account;
 import org.das.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.Optional;
 import java.util.UUID;
 
+//todo use validation in this class
 @Service
 public class AccountServiceImpl implements AccountService {
     private final UserDao users;
@@ -25,8 +25,10 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public boolean accountClose(UUID accountId) {
-        return false;
+    public void accountClose(UUID accountId) {
+        users.getUsers().values().stream()
+                .map(User::getAccounts)
+                .forEach(accounts -> accounts.removeIf(acc -> acc.getAccountId().equals(accountId)));
     }
 
     @Override
@@ -38,8 +40,15 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public boolean accountTransfer(UUID senderId, UUID recipientId, double amount) {
-        return false;
+    public void accountTransfer(UUID senderId, UUID recipientId, double amount) {
+        Account sender = findAccountById(senderId)
+                .orElseThrow(() -> new RuntimeException("Account senderId not exist"));
+
+        Account recipient = findAccountById(recipientId)
+                .orElseThrow(() -> new RuntimeException("Account recipientId not exist"));
+
+        sender.decreaseAmount(amount);
+        recipient.increaseAmount(amount);
     }
 
     @Override
@@ -51,7 +60,6 @@ public class AccountServiceImpl implements AccountService {
 
 
     private Optional<Account> findAccountById(UUID accountId) {
-
         for (User user : users.getUsers().values()) {
             Optional<Account> account = user.getAccountById(accountId);
             if (account.isPresent()) {
