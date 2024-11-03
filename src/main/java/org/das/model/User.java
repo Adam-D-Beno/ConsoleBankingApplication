@@ -7,10 +7,9 @@ import java.util.UUID;
 
 
 public class User {
-    private UUID userId;
-    private String login;
-    private List<Account> accounts;
-
+    private final UUID userId;
+    private final String login;
+    private final List<Account> accounts;
 
     public User(String login) {
         this.userId = UUID.randomUUID();
