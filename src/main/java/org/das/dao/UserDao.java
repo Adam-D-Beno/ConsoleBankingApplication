@@ -5,6 +5,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Optional;
 
 @Component
 public class UserDao {
@@ -14,11 +15,11 @@ public class UserDao {
         this.users = new HashMap<>();
     }
 
-    public User getUser(String login) {
-        return users.get(login);
+    public Optional<User> getUser(String login) {
+        return Optional.ofNullable(users.get(login));
     }
 
-    public void setUser(User user) {
+    public void saveUser(User user) {
         this.users.put(user.getLogin(), user);
     }
 
