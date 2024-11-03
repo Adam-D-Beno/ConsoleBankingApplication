@@ -1,74 +1,69 @@
 package org.das.service;
 
+import org.das.dao.AccountDao;
 import org.das.dao.UserDao;
 import org.das.model.Account;
 import org.das.model.User;
+import org.das.validate.AccountValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
-import java.util.Optional;
 import java.util.UUID;
 
 //todo use validation in this class
 @Service
 public class AccountServiceImpl implements AccountService {
-    private final UserDao users;
+    private final UserDao userDao;
+    private final AccountDao accountDao;
+    private final AccountValidation accountValidation;
 
     @Autowired
-    public AccountServiceImpl(UserDao users) {
-        this.users = users;
+    public AccountServiceImpl(UserDao userDao, AccountDao accountDao, AccountValidation accountValidation) {
+        this.userDao = userDao;
+        this.accountDao = accountDao;
+        this.accountValidation = accountValidation;
     }
 
 
     @Override
     public Account accountCreate(UUID userId) {
-        return new Account(userId);
+       Account account = new Account(userId);
+       accountDao.saveAccount(account);
+       return account;
     }
 
     @Override
     public void accountClose(UUID accountId) {
-        users.getUsers().values().stream()
-                .map(User::getAccounts)
-                .forEach(accounts -> accounts.removeIf(acc -> acc.getAccountId().equals(accountId)));
+        accountDao.getAccounts().remove(accountId);
     }
 
     @Override
     public void accountDeposit(UUID accountId, BigDecimal amount) {
-        Account account = findAccountById(accountId)
+        accountValidation.negativeAmount(amount);
+        Account account = accountDao.getAccounts(accountId)
                 .orElseThrow(() -> new RuntimeException("Account not exist"));
         account.increaseAmount(amount);
 
     }
 
     @Override
-    public void accountTransfer(UUID senderId, UUID recipientId, BigDecimal amount) {
-        Account sender = findAccountById(senderId)
-                .orElseThrow(() -> new RuntimeException("Account senderId not exist"));
-
-        Account recipient = findAccountById(recipientId)
-                .orElseThrow(() -> new RuntimeException("Account recipientId not exist"));
-
-        sender.decreaseAmount(amount);
-        recipient.increaseAmount(amount);
-    }
-
-    @Override
     public void accountWithdraw(UUID accountId, BigDecimal amount) {
-        Account account = findAccountById(accountId)
+        accountValidation.negativeAmount(amount);
+        Account account = accountDao.getAccounts(accountId)
                 .orElseThrow(() -> new RuntimeException("Account not exist"));
-
+        accountValidation.negativeBalance(account, amount);
         account.decreaseAmount(amount);
     }
 
-
-    private Optional<Account> findAccountById(UUID accountId) {
-        for (User user : users.getUsers().values()) {
-            Optional<Account> account = user.getAccountById(accountId);
-            if (account.isPresent()) {
-               return account;
-            }
-        }
-        return Optional.empty();
+    @Override
+    public void accountTransfer(UUID senderId, UUID recipientId, BigDecimal amount) {
+        accountValidation.negativeAmount(amount);
+        Account sender = accountDao.getAccounts(senderId)
+                .orElseThrow(() -> new RuntimeException("Account senderId not exist"));
+        accountValidation.negativeBalance(sender, amount);
+        Account recipient = accountDao.getAccounts(recipientId)
+                .orElseThrow(() -> new RuntimeException("Account recipientId not exist"));
+        sender.decreaseAmount(amount);
+        recipient.increaseAmount(amount);
     }
 }
