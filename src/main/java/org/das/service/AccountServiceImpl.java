@@ -7,7 +7,9 @@ import org.das.model.User;
 import org.das.validate.AccountValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.math.BigDecimal;
+import java.util.Map;
 import java.util.UUID;
 
 //todo use validation in this class
@@ -24,22 +26,27 @@ public class AccountServiceImpl implements AccountService {
         this.accountValidation = accountValidation;
     }
 
-
     @Override
     public Account accountCreate(UUID userId) {
-       Account account = new Account(userId);
-       accountDao.saveAccount(account);
-       return account;
+        Account account = new Account(userId);
+        accountDao.saveAccount(account);
+        return account;
     }
 
     @Override
     public void accountClose(UUID accountId) {
+        accountValidation.accountAlreadyExist(accountId);
+        Account account = accountDao.getAccounts().get(accountId);
+        if (countSizeAccountByUser(account)) {
+            throw new RuntimeException("Account: " + account + " cant delete, because user have only one account");
+        }
         accountDao.getAccounts().remove(accountId);
     }
 
     @Override
     public void accountDeposit(UUID accountId, BigDecimal amount) {
         accountValidation.negativeAmount(amount);
+        accountValidation.accountAlreadyExist(accountId);
         Account account = accountDao.getAccounts(accountId)
                 .orElseThrow(() -> new RuntimeException("Account not exist"));
         account.increaseAmount(amount);
@@ -48,6 +55,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void accountWithdraw(UUID accountId, BigDecimal amount) {
         accountValidation.negativeAmount(amount);
+        accountValidation.accountAlreadyExist(accountId);
         Account account = accountDao.getAccounts(accountId)
                 .orElseThrow(() -> new RuntimeException("Account not exist"));
         accountValidation.negativeBalance(account, amount);
@@ -57,6 +65,8 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void accountTransfer(UUID senderId, UUID recipientId, BigDecimal amount) {
         accountValidation.negativeAmount(amount);
+        accountValidation.accountAlreadyExist(senderId);
+        accountValidation.accountAlreadyExist(recipientId);
         Account sender = accountDao.getAccounts(senderId)
                 .orElseThrow(() -> new RuntimeException("Account senderId not exist"));
         accountValidation.negativeBalance(sender, amount);
@@ -64,5 +74,14 @@ public class AccountServiceImpl implements AccountService {
                 .orElseThrow(() -> new RuntimeException("Account recipientId not exist"));
         sender.decreaseAmount(amount);
         recipient.increaseAmount(amount);
+    }
+
+
+    private boolean countSizeAccountByUser(Account account) {
+        return userDao.getUsers().entrySet().stream().
+                map(Map.Entry::getValue)
+                .filter(user -> user.getUserId().equals(account.getUserId()))
+                .map(findUser -> findUser.getAccounts().size())
+                .anyMatch(accSize -> accSize == 1);
     }
 }
