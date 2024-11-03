@@ -43,7 +43,6 @@ public class AccountServiceImpl implements AccountService {
         Account account = accountDao.getAccounts(accountId)
                 .orElseThrow(() -> new RuntimeException("Account not exist"));
         account.increaseAmount(amount);
-
     }
 
     @Override
