@@ -3,16 +3,13 @@ package org.das.service;
 import org.das.dao.AccountDao;
 import org.das.dao.UserDao;
 import org.das.model.Account;
-import org.das.model.User;
 import org.das.validate.AccountValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.util.Map;
 import java.util.UUID;
 
-//todo use validation in this class
 @Service
 public class AccountServiceImpl implements AccountService {
     private final UserDao userDao;
@@ -75,7 +72,6 @@ public class AccountServiceImpl implements AccountService {
         sender.decreaseAmount(amount);
         recipient.increaseAmount(amount);
     }
-
 
     private boolean countSizeAccountByUser(Account account) {
         return userDao.getUsers().entrySet().stream().
