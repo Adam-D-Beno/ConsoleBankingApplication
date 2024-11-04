@@ -42,13 +42,20 @@ public class OperationsConsoleListener {
             if (userEnter.equals("SHOW_ALL_USERS")) {
                 executeOperation.showAllUsers();
             }
-            if (userEnter.equals("ACCOUNT_CLOSE")) {}
-            if (userEnter.equals("ACCOUNT_WITHDRAW")) {}
-            if (userEnter.equals("ACCOUNT_DEPOSIT")) {
+            if (userEnter.equals("ACCOUNT_CLOSE")) {
+                executeOperation.executeOperationsAccountClose(scanner);
+            }
+            if (userEnter.equals("ACCOUNT_WITHDRAW")) {
                 executeOperation.executeOperationsAccountWithdraw(scanner);
+            }
+            if (userEnter.equals("ACCOUNT_DEPOSIT")) {
+                executeOperation.executeOperationsAccountDeposit(scanner);
             }
             if (userEnter.equals("USER_CREATE")) {
                 executeOperation.executeOperationsUserCreate(scanner);
+            }
+            if (userEnter.equals("ACCOUNT_TRANSFER")) {
+                executeOperation.executeOperationsAccountTransfer(scanner);
             }
         }
     }
