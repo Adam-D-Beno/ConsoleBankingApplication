@@ -34,12 +34,16 @@ public class OperationsConsoleListener {
                     -USER_CREATE""");
 
             String userEnter = scanner.nextLine();
-            if (userEnter.equals("-ACCOUNT_CREATE")) {
+            if (userEnter.equals("ACCOUNT_CREATE")) {}
+            if (userEnter.equals("SHOW_ALL_USERS")) {}
+            if (userEnter.equals("ACCOUNT_CLOSE")) {}
+            if (userEnter.equals("ACCOUNT_WITHDRAW")) {}
+            if (userEnter.equals("ACCOUNT_DEPOSIT")) {}
+            if (userEnter.equals("USER_CREATE")) {
                 String login = executeUserInputs.executeOperationsUserCreate(scanner);
                 User user = userService.userCreate(login);
-                System.out.println("Account created successfully " + user.toString());
+                System.out.println("User created successfully " + user.toString());
             }
-            System.out.println(userEnter);
         }
     }
 }
