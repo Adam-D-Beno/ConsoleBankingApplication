@@ -7,6 +7,9 @@ import org.das.validate.UserValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+import java.util.UUID;
+
 @Service
 public class UserServiceImpl implements UserService {
     private final UserDao userDao;
@@ -33,5 +36,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public void showAllUsers() {
         userDao.getUsers().forEach((key, value) -> System.out.println(value));
+    }
+    @Override
+    public Optional<User> getUserByLogin(UUID id) {
+        return userDao.getUser(id);
     }
 }
