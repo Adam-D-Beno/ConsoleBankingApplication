@@ -30,7 +30,7 @@ public class ExecuteOperation {
     }
 
     public void executeOperationsUserCreate(Scanner scanner) {
-        System.out.println("Please enter the login for new user");
+        System.out.println("Please enter the login for new user ");
         String login = scanner.nextLine();
         userValidation.userLoginCorrect(login);
         User user = userService.userCreate(login);
@@ -38,7 +38,7 @@ public class ExecuteOperation {
 
     }
     public void executeOperationsAccountCreate(Scanner scanner) {
-        System.out.println("Enter the user id for which to create an account:");
+        System.out.println("Enter the user id for which to create an account: ");
         String userId = scanner.nextLine();
         userValidation.userLoginCorrect(userId);
         Account account = accountService.accountCreate(UUID.fromString(userId));
@@ -46,23 +46,47 @@ public class ExecuteOperation {
                 userService.getUserByLogin(account.getUserId()).get().getLogin());
     }
     public void executeOperationsAccountClose(Scanner scanner) {
-    }
-    public void executeOperationsAccountWithdraw(Scanner scanner) {
-        System.out.println(" Enter account ID:");
+        System.out.println("Enter account ID to close: ");
         String accountId = scanner.nextLine();
         userValidation.userLoginCorrect(accountId);
-        System.out.println("Enter amount to deposit:");
+        accountService.accountClose(UUID.fromString(accountId));
+        System.out.println("Account with ID " + accountId + " has been closed.");
+    }
+    public void executeOperationsAccountWithdraw(Scanner scanner) {
+        System.out.println("Enter account ID to withdraw from: ");
+        String accountId = scanner.nextLine();
+        userValidation.userLoginCorrect(accountId);
+        System.out.println("Enter amount to withdraw: ");
+        //todo validate amount
+        double amount = scanner.nextDouble();
+        accountService.accountWithdraw(UUID.fromString(accountId), BigDecimal.valueOf(amount));
+        System.out.println("Amount " + amount + " withdraw to account ID: " + accountId);
+    }
+    public void executeOperationsAccountDeposit(Scanner scanner) {
+        System.out.println("Enter account ID: ");
+        String accountId = scanner.nextLine();
+        userValidation.userLoginCorrect(accountId);
+        System.out.println("Enter amount to deposit: ");
+        //todo validate amount
         double amount = scanner.nextDouble();
         accountService.accountDeposit(UUID.fromString(accountId), BigDecimal.valueOf(amount));
         System.out.println("Amount " + amount + " deposited to account ID: " + accountId);
-
-    }
-    public void executeOperationsAccountDeposit(Scanner scanner) {
     }
     public void executeOperationsAccountTransfer(Scanner scanner) {
+        System.out.println("Enter source account ID: ");
+        String source = scanner.nextLine();
+        userValidation.userLoginCorrect(source);
+        System.out.println("Enter target account ID: ");
+        String target = scanner.nextLine();
+        userValidation.userLoginCorrect(target);
+        System.out.println("Enter amount to transfer: ");
+        //todo validate amount
+        double amount = scanner.nextDouble();
+        accountService.accountTransfer(UUID.fromString(source), UUID.fromString(target), BigDecimal.valueOf(amount));
+        System.out.println(" Amount " + amount + " transferred from account ID " + source + " to account ID " + target);
     }
     public void showAllUsers() {
-        System.out.println("List of all users:");
+        System.out.println("List of all users: ");
         userService.showAllUsers();
     }
 }
