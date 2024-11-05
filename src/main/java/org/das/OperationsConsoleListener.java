@@ -1,26 +1,14 @@
 package org.das;
 
-import org.das.model.Account;
-import org.das.model.User;
-import org.das.service.AccountService;
-import org.das.service.UserService;
 import org.das.utils.ExecuteOperation;
-import org.das.validate.AccountValidation;
-import org.das.validate.UserValidation;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
 import java.util.Scanner;
-import java.util.UUID;
 
 public class OperationsConsoleListener {
     public static void main(String[] args) {
 
         AnnotationConfigApplicationContext context =
                 new AnnotationConfigApplicationContext("org.das");
-        AccountService accountService = context.getBean(AccountService.class);
-        UserService userService = context.getBean(UserService.class);
-        AccountValidation accountValidation = context.getBean(AccountValidation.class);
-        UserValidation userValidation = context.getBean(UserValidation.class);
         ExecuteOperation executeOperation = context.getBean(ExecuteOperation.class);
         Scanner scanner = new Scanner(System.in);
 
