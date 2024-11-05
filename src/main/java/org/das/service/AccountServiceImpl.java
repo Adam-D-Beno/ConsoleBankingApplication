@@ -37,7 +37,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     private void setDefaultAmount(Account account) {
-        if (countSizeAccountByUser(account)) {
+        if (isFirstAccount(account)) {
             account.decreaseAmount(BigDecimal.valueOf(Double.parseDouble(defaultAmount)));
         }
     }
@@ -89,5 +89,9 @@ public class AccountServiceImpl implements AccountService {
                return userDao.getUsers().values().stream()
     .filter(user -> user.getUserId().equals(account.getUserId()))
     .anyMatch(user -> user.getAccounts().isEmpty());
+    }
+
+    private boolean isFirstAccount(Account account) {
+        return countSizeAccountByUser(account);
     }
 }
