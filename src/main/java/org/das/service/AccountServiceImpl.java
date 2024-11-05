@@ -3,11 +3,14 @@ package org.das.service;
 import org.das.dao.AccountDao;
 import org.das.dao.UserDao;
 import org.das.model.Account;
+import org.das.model.User;
 import org.das.validate.AccountValidation;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -15,6 +18,8 @@ public class AccountServiceImpl implements AccountService {
     private final UserDao userDao;
     private final AccountDao accountDao;
     private final AccountValidation accountValidation;
+    @Value("${account.default-amount}")
+    private String defaultAmount;
 
     @Autowired
     public AccountServiceImpl(UserDao userDao, AccountDao accountDao, AccountValidation accountValidation) {
@@ -26,8 +31,15 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account accountCreate(UUID userId) {
         Account account = new Account(userId);
+        setDefaultAmount(account);
         accountDao.saveAccount(account);
         return account;
+    }
+
+    private void setDefaultAmount(Account account) {
+        if (countSizeAccountByUser(account)) {
+            account.decreaseAmount(BigDecimal.valueOf(Double.parseDouble(defaultAmount)));
+        }
     }
 
     @Override
@@ -74,10 +86,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     private boolean countSizeAccountByUser(Account account) {
-        return userDao.getUsers().entrySet().stream().
-                map(Map.Entry::getValue)
-                .filter(user -> user.getUserId().equals(account.getUserId()))
-                .map(findUser -> findUser.getAccounts().size())
-                .anyMatch(accSize -> accSize == 1);
+               return userDao.getUsers().values().stream()
+    .filter(user -> user.getUserId().equals(account.getUserId()))
+    .anyMatch(user -> user.getAccounts().isEmpty());
     }
 }
