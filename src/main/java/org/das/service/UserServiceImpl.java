@@ -37,6 +37,7 @@ public class UserServiceImpl implements UserService {
     public void showAllUsers() {
         userDao.getUsers().forEach((key, value) -> System.out.println(value));
     }
+
     @Override
     public Optional<User> getUserByLogin(UUID id) {
         return userDao.getUser(id);
