@@ -39,7 +39,8 @@ public class ExecuteOperation {
         userValidation.userLoginCorrect(userId);
         Account account = accountService.accountCreate(UUID.fromString(userId));
         System.out.println("New account created with ID: " + account.getAccountId() +
-                userService.getUserByLogin(account.getUserId()).get().getLogin());
+                userService.getUserById(account.getUserId()).get().getLogin());
+
     }
     public void executeOperationsAccountClose(Scanner scanner) {
         System.out.println("Enter account ID to close: ");
