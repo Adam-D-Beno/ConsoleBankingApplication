@@ -4,11 +4,9 @@ import org.das.model.Account;
 import org.das.model.User;
 import org.das.service.AccountService;
 import org.das.service.UserService;
-import org.das.validate.AccountValidation;
 import org.das.validate.UserValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import java.math.BigDecimal;
 import java.util.Scanner;
 import java.util.UUID;
@@ -16,15 +14,13 @@ import java.util.UUID;
 @Component
 public class ExecuteOperation {
     private final UserValidation userValidation;
-    private final AccountValidation accountValidation;
     private final UserService userService;
     private final AccountService accountService;
 
     @Autowired
-    public ExecuteOperation(UserValidation userValidation, AccountValidation accountValidation,
-                            UserService userService, AccountService accountService) {
+    public ExecuteOperation(UserValidation userValidation, UserService userService,
+                            AccountService accountService) {
         this.userValidation = userValidation;
-        this.accountValidation = accountValidation;
         this.userService = userService;
         this.accountService = accountService;
     }
@@ -57,7 +53,6 @@ public class ExecuteOperation {
         String accountId = scanner.nextLine();
         userValidation.userLoginCorrect(accountId);
         System.out.println("Enter amount to withdraw: ");
-        //todo validate amount
         double amount = scanner.nextDouble();
         accountService.accountWithdraw(UUID.fromString(accountId), BigDecimal.valueOf(amount));
         System.out.println("Amount " + amount + " withdraw to account ID: " + accountId);
@@ -67,7 +62,6 @@ public class ExecuteOperation {
         String accountId = scanner.nextLine();
         userValidation.userLoginCorrect(accountId);
         System.out.println("Enter amount to deposit: ");
-        //todo validate amount
         double amount = scanner.nextDouble();
         accountService.accountDeposit(UUID.fromString(accountId), BigDecimal.valueOf(amount));
         System.out.println("Amount " + amount + " deposited to account ID: " + accountId);
@@ -80,7 +74,6 @@ public class ExecuteOperation {
         String target = scanner.nextLine();
         userValidation.userLoginCorrect(target);
         System.out.println("Enter amount to transfer: ");
-        //todo validate amount
         double amount = scanner.nextDouble();
         accountService.accountTransfer(UUID.fromString(source), UUID.fromString(target), BigDecimal.valueOf(amount));
         System.out.println(" Amount " + amount + " transferred from account ID " + source + " to account ID " + target);
