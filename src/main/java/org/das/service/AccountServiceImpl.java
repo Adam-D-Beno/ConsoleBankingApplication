@@ -3,14 +3,11 @@ package org.das.service;
 import org.das.dao.AccountDao;
 import org.das.dao.UserDao;
 import org.das.model.Account;
-import org.das.model.User;
 import org.das.validate.AccountValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
-import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
