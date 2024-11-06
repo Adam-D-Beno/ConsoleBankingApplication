@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public Optional<User> getUserByLogin(UUID id) {
+    public Optional<User> getUserById(UUID id) {
         return userDao.getUser(id);
     }
 }
