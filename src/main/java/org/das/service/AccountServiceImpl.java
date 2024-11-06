@@ -45,7 +45,7 @@ public class AccountServiceImpl implements AccountService {
     public void accountClose(UUID accountId) {
         accountValidation.accountAlreadyExist(accountId);
         Account account = accountDao.getAccounts().get(accountId);
-        if (getTotalAccountCount(account)) {
+        if (hasNoAccounts(account)) {
             throw new RuntimeException("Account: " + account + " cant delete, because user have only one account");
         }
         accountDao.getAccounts().remove(accountId);
@@ -87,14 +87,14 @@ public class AccountServiceImpl implements AccountService {
         toAccount.increaseAmount(amount);
     }
 
-    private boolean getTotalAccountCount(Account account) {
+    private boolean hasNoAccounts(Account account) {
                return userDao.getUsers().values().stream()
     .filter(user -> user.getUserId().equals(account.getUserId()))
     .anyMatch(user -> user.getAccounts().isEmpty());
     }
 
     private boolean isFirstAccount(Account account) {
-        return getTotalAccountCount(account);
+        return hasNoAccounts(account);
     }
 
     private boolean isOwnAccountTransfer(Account fromAccount, Account toAccount) {
