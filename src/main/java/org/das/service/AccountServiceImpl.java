@@ -20,6 +20,8 @@ public class AccountServiceImpl implements AccountService {
     private final AccountValidation accountValidation;
     @Value("${account.default-amount}")
     private String defaultAmount;
+    @Value("${account.transfer-commission}")
+    private String transferCommission;
 
     @Autowired
     public AccountServiceImpl(UserDao userDao, AccountDao accountDao, AccountValidation accountValidation) {
@@ -76,13 +78,16 @@ public class AccountServiceImpl implements AccountService {
         accountValidation.negativeAmount(amount);
         accountValidation.accountAlreadyExist(senderId);
         accountValidation.accountAlreadyExist(recipientId);
-        Account sender = accountDao.getAccounts(senderId)
+        Account fromAccount = accountDao.getAccounts(senderId)
                 .orElseThrow(() -> new RuntimeException("Account senderId not exist"));
-        accountValidation.negativeBalance(sender, amount);
-        Account recipient = accountDao.getAccounts(recipientId)
+        accountValidation.negativeBalance(fromAccount, amount);
+        Account toAccount = accountDao.getAccounts(recipientId)
                 .orElseThrow(() -> new RuntimeException("Account recipientId not exist"));
-        sender.decreaseAmount(amount);
-        recipient.increaseAmount(amount);
+        if (!isOwnAccountTransfer(fromAccount, toAccount)) {
+            amount = amount.multiply(BigDecimal.valueOf(Double.parseDouble(transferCommission)));
+        }
+        fromAccount.decreaseAmount(amount);
+        toAccount.increaseAmount(amount);
     }
 
     private boolean countSizeAccountByUser(Account account) {
@@ -93,5 +98,9 @@ public class AccountServiceImpl implements AccountService {
 
     private boolean isFirstAccount(Account account) {
         return countSizeAccountByUser(account);
+    }
+
+    private boolean isOwnAccountTransfer(Account fromAccount, Account toAccount) {
+        return fromAccount.getUserId().equals(toAccount.getUserId());
     }
 }
