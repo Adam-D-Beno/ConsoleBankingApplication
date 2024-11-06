@@ -20,7 +20,7 @@ public class UserDao {
     }
 
     public Optional<User> getUser(UUID id) {
-        return Optional.ofNullable(users.get(id));
+        return getUsers().values().stream().filter(user -> user.getUserId().equals(id)).findFirst();
     }
 
     public void saveUser(User user) {
