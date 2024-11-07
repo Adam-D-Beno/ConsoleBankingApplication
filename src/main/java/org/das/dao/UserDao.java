@@ -2,10 +2,8 @@ package org.das.dao;
 
 import org.das.model.User;
 import org.springframework.stereotype.Component;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+
+import java.util.*;
 
 @Component
 public class UserDao {
@@ -20,15 +18,15 @@ public class UserDao {
     }
 
     public Optional<User> getUser(UUID id) {
-        return getUsers().values().stream().filter(user -> user.getUserId().equals(id)).findFirst();
+        return getUsers().stream().filter(user -> user.getUserId().equals(id)).findFirst();
     }
 
     public void saveUser(User user) {
         this.users.put(user.getLogin(), user);
     }
 
-    public Map<String, User> getUsers() {
-        return users;
+    public Collection<User> getUsers() {
+        return users.values();
     }
 
     public boolean userExist(String login) {
