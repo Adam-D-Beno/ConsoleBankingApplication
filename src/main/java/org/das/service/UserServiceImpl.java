@@ -33,7 +33,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void showAllUsers() {
-        userDao.getUsers().forEach((key, value) -> System.out.println(value));
+        userDao.getUsers().forEach(System.out::println);
     }
 
     @Override
