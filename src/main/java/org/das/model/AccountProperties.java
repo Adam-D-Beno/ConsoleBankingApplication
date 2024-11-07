@@ -21,4 +21,5 @@ public class AccountProperties {
     public double getTransferComission() {
         return transferComission;
     }
+
 }
