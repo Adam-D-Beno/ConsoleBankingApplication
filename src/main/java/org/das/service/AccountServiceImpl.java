@@ -88,7 +88,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     private boolean hasNoAccounts(Account account) {
-               return userDao.getUsers().values().stream()
+               return userDao.getUsers().stream()
     .filter(user -> user.getUserId().equals(account.getUserId()))
     .anyMatch(user -> user.getAccounts().isEmpty());
     }
