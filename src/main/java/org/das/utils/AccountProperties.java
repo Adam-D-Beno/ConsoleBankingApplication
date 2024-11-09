@@ -9,9 +9,9 @@ public class AccountProperties {
     private final double transferComission;
 
     public AccountProperties(@Value("${account.default-amount}") int defaultAmount,
-                             @Value("${account.transfer-commission}") double transferComission) {
+                             @Value("${account.transfer-commission}") double transferCommission) {
         this.defaultAmount = defaultAmount;
-        this.transferComission = transferComission;
+        this.transferComission = transferCommission;
     }
 
     public int getDefaultAmount() {
