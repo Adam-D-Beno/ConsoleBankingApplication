@@ -6,9 +6,9 @@ import java.math.BigDecimal;
 import java.util.UUID;
 
 public interface AccountService {
-    Account accountCreate(UUID userId);
-    void accountClose(UUID accountId);
-    void accountDeposit(UUID accountId, BigDecimal amount);
-    void accountTransfer(UUID senderId, UUID recipientId, BigDecimal amount);
-    void accountWithdraw(UUID accountId, BigDecimal amount);
+    Account create(UUID userId);
+    void close(UUID accountId);
+    void deposit(UUID accountId, BigDecimal amount);
+    void transfer(UUID senderId, UUID recipientId, BigDecimal amount);
+    void withdraw(UUID accountId, BigDecimal amount);
 }
