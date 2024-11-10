@@ -28,7 +28,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public Account accountCreate(UUID userId) {
+    public Account create(UUID userId) {
         Account account = new Account(userId);
         setDefaultAmount(account);
         accountDao.saveAccount(account);
@@ -42,7 +42,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void accountClose(UUID accountId) {
+    public void close(UUID accountId) {
         accountValidation.accountAlreadyExist(accountId);
         Account account = accountDao.getAccounts().get(accountId);
         if (hasNoAccounts(account)) {
@@ -52,7 +52,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void accountDeposit(UUID accountId, BigDecimal amount) {
+    public void deposit(UUID accountId, BigDecimal amount) {
         accountValidation.negativeAmount(amount);
         accountValidation.accountAlreadyExist(accountId);
         Account account = accountDao.getAccounts(accountId)
@@ -61,7 +61,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void accountWithdraw(UUID accountId, BigDecimal amount) {
+    public void withdraw(UUID accountId, BigDecimal amount) {
         accountValidation.negativeAmount(amount);
         accountValidation.accountAlreadyExist(accountId);
         Account account = accountDao.getAccounts(accountId)
@@ -71,7 +71,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void accountTransfer(UUID senderId, UUID recipientId, BigDecimal amount) {
+    public void transfer(UUID senderId, UUID recipientId, BigDecimal amount) {
         accountValidation.negativeAmount(amount);
         accountValidation.accountAlreadyExist(senderId);
         accountValidation.accountAlreadyExist(recipientId);
