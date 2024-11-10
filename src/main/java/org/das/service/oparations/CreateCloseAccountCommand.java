@@ -2,10 +2,10 @@ package org.das.service.oparations;
 
 import org.das.utils.ConsoleOperationType;
 
-public class CreateUserCommand implements OperationCommand {
-
+public class CreateCloseAccountCommand implements OperationCommand {
     @Override
     public void execute() {
+
     }
 
     @Override
