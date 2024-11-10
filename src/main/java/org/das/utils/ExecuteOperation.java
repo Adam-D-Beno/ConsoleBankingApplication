@@ -29,7 +29,7 @@ public class ExecuteOperation {
         System.out.println("Please enter the login for new user ");
         String login = scanner.nextLine();
         userValidation.userLoginCorrect(login);
-        User user = userService.userCreate(login);
+        User user = userService.create(login);
         System.out.println("User created successfully " + user.toString());
     }
 
@@ -37,7 +37,7 @@ public class ExecuteOperation {
         System.out.println("Enter the user id for which to create an account: ");
         String userId = scanner.nextLine();
         userValidation.userLoginCorrect(userId);
-        Account account = accountService.accountCreate(UUID.fromString(userId));
+        Account account = accountService.create(UUID.fromString(userId));
         System.out.println("New account created with ID: " + account.getAccountId() +
                 userService.getUserById(account.getUserId()).get().getLogin());
 
@@ -47,7 +47,7 @@ public class ExecuteOperation {
         System.out.println("Enter account ID to close: ");
         String accountId = scanner.nextLine();
         userValidation.userLoginCorrect(accountId);
-        accountService.accountClose(UUID.fromString(accountId));
+        accountService.close(UUID.fromString(accountId));
         System.out.println("Account with ID " + accountId + " has been closed.");
     }
 
@@ -57,7 +57,7 @@ public class ExecuteOperation {
         userValidation.userLoginCorrect(accountId);
         System.out.println("Enter amount to withdraw: ");
         double amount = scanner.nextDouble();
-        accountService.accountWithdraw(UUID.fromString(accountId), BigDecimal.valueOf(amount));
+        accountService.withdraw(UUID.fromString(accountId), BigDecimal.valueOf(amount));
         System.out.println("Amount " + amount + " withdraw to account ID: " + accountId);
     }
 
@@ -67,7 +67,7 @@ public class ExecuteOperation {
         userValidation.userLoginCorrect(accountId);
         System.out.println("Enter amount to deposit: ");
         double amount = scanner.nextDouble();
-        accountService.accountDeposit(UUID.fromString(accountId), BigDecimal.valueOf(amount));
+        accountService.deposit(UUID.fromString(accountId), BigDecimal.valueOf(amount));
         System.out.println("Amount " + amount + " deposited to account ID: " + accountId);
     }
 
@@ -80,7 +80,7 @@ public class ExecuteOperation {
         userValidation.userLoginCorrect(target);
         System.out.println("Enter amount to transfer: ");
         double amount = scanner.nextDouble();
-        accountService.accountTransfer(UUID.fromString(source), UUID.fromString(target), BigDecimal.valueOf(amount));
+        accountService.transfer(UUID.fromString(source), UUID.fromString(target), BigDecimal.valueOf(amount));
         System.out.println(" Amount " + amount + " transferred from account ID " + source + " to account ID " + target);
     }
 
