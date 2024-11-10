@@ -28,7 +28,7 @@ public class AccountDao {
         return Optional.ofNullable(accounts.get(id));
     }
 
-    public boolean AccountExist(UUID id) {
+    public boolean accountExist(UUID id) {
         return accounts.containsKey(id);
     }
 }
