@@ -4,6 +4,7 @@ import org.das.dao.AccountDao;
 import org.das.model.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
 import java.math.BigDecimal;
 import java.util.UUID;
 
@@ -18,21 +19,21 @@ public class AccountValidation {
 
     public void negativeAmount(BigDecimal amount) {
         if (amount.signum() == -1) {
-            throw new RuntimeException("Amount is negative: " + amount);
+            throw new IllegalArgumentException("Amount is negative: " + amount);
         }
     }
 
     public void negativeBalance(Account account, BigDecimal amount) {
         BigDecimal balance = account.getMoneyAmount();
         if (balance.subtract(amount).signum() == -1) {
-            throw new RuntimeException("Insufficient balance: " + balance
-                    + " account id " + account.getAccountId());
+            throw new IllegalArgumentException(("No such money to transfer from account with id=%s, money amount=%s," +
+                    "attempted withdraw=%s".formatted(account.getAccountId(), account.getMoneyAmount(), amount)));
         }
     }
 
-    public void accountAlreadyExist(UUID id) {
-        if (!accountDao.AccountExist(id)) {
-            throw new RuntimeException("User with account id: " + id + " already exist");
+    public void accountExist(UUID accountId) {
+        if (!accountDao.accountExist(accountId)) {
+            throw new IllegalArgumentException("User with account id=%s already exist".formatted(accountId));
         }
     }
 }
