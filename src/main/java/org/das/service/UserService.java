@@ -6,7 +6,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 public interface UserService {
-   User userCreate(String login);
+   User create(String login);
    void showAllUsers();
    Optional<User> getUserById(UUID id);
 
