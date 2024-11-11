@@ -60,7 +60,7 @@ public class AccountServiceImpl implements AccountService {
     public void accountDeposit(UUID accountId, BigDecimal amount) {
         accountValidation.negativeAmount(amount);
         Account account = accountDao.getAccount(accountId)
-                .orElseThrow(() -> new RuntimeException("Account not exist"));
+                .orElseThrow(() -> new IllegalArgumentException("Account not exist id=%s".formatted(accountId)));
         account.increaseAmount(amount);
     }
 
@@ -68,7 +68,7 @@ public class AccountServiceImpl implements AccountService {
     public void accountWithdraw(UUID accountId, BigDecimal amount) {
         accountValidation.negativeAmount(amount);
         Account account = accountDao.getAccount(accountId)
-                .orElseThrow(() -> new RuntimeException("Account not exist"));
+                .orElseThrow(() -> new IllegalArgumentException("Account not exist id=%s".formatted(accountId)));
         accountValidation.negativeBalance(account, amount);
         account.decreaseAmount(amount);
     }
@@ -77,13 +77,13 @@ public class AccountServiceImpl implements AccountService {
     public void accountTransfer(UUID senderId, UUID recipientId, BigDecimal amount) {
         accountValidation.negativeAmount(amount);
         Account fromAccount = accountDao.getAccount(senderId)
-                .orElseThrow(() -> new RuntimeException("Account senderId not exist"));
+                .orElseThrow(() -> new IllegalArgumentException("No such account: id=%s".formatted(senderId)));
         accountValidation.negativeBalance(fromAccount, amount);
         Account toAccount = accountDao.getAccount(recipientId)
-                .orElseThrow(() -> new RuntimeException("Account recipientId not exist"));
-        if (!isOwnAccountTransfer(fromAccount, toAccount)) {
-            amount = amount.multiply(BigDecimal.valueOf(Double.parseDouble(transferCommission)));
-        }
+                .orElseThrow(() -> new IllegalArgumentException("No such account: id=%s".formatted(recipientId)));
+        isOwnAccountTransfer(fromAccount, toAccount);
+        //todo change
+        amount = amount.multiply(BigDecimal.valueOf(Double.parseDouble(transferCommission)));
         fromAccount.decreaseAmount(amount);
         toAccount.increaseAmount(amount);
     }
@@ -98,7 +98,10 @@ public class AccountServiceImpl implements AccountService {
         return hasNoAccounts(account);
     }
 
-    private boolean isOwnAccountTransfer(Account fromAccount, Account toAccount) {
-        return fromAccount.getUserId().equals(toAccount.getUserId());
+    private void isOwnAccountTransfer(Account fromAccount, Account toAccount) {
+        if (fromAccount.getUserId().equals(toAccount.getUserId())) {
+            throw new IllegalArgumentException("Account from id=%s and account to id=%s  transfer is same"
+                    .formatted(fromAccount.getAccountId(), toAccount.getAccountId()));
+        }
     }
 }
