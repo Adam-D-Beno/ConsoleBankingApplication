@@ -16,7 +16,7 @@ public class UserValidation {
 
     public void userAlreadyExist(String login) {
         if (userDao.userExist(login)) {
-            throw new RuntimeException("User with login: " + login + " already exist");
+            throw new IllegalArgumentException("User with login =%s already exist".formatted(login));
         }
     }
 
