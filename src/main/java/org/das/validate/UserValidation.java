@@ -21,8 +21,8 @@ public class UserValidation {
     }
 
     public void userLoginCorrect(String login) {
-       if (StringUtils.isBlank(login)) {
-           throw new RuntimeException("Login: " + login + " is NULL or Empty");
-       }
+        if (StringUtils.isBlank(login)) {
+            throw new IllegalArgumentException("Login = %s is NULL or Empty".formatted(login));
+        }
     }
 }
