@@ -6,6 +6,11 @@ import java.util.UUID;
 public class Account {
     private final UUID accountId;
     private final UUID userId;
+
+    public void setMoneyAmount(BigDecimal moneyAmount) {
+        this.moneyAmount = moneyAmount;
+    }
+
     private BigDecimal moneyAmount;
 
     public Account(UUID userId) {
