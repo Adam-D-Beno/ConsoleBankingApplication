@@ -22,12 +22,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User userCreate(String login) {
+    public User create(String login) {
         userValidation.userLoginCorrect(login);
         userValidation.userAlreadyExist(login);
         User user = new User(login);
         userDao.saveUser(user);
-        user.setAccounts(accountService.accountCreate(user.getUserId()));
+        user.setAccounts(accountService.create(user.getUserId()));
         return user;
     }
 

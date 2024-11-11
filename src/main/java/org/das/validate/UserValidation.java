@@ -16,13 +16,13 @@ public class UserValidation {
 
     public void userAlreadyExist(String login) {
         if (userDao.userExist(login)) {
-            throw new RuntimeException("User with login: " + login + " already exist");
+            throw new IllegalArgumentException("User with login =%s already exist".formatted(login));
         }
     }
 
     public void userLoginCorrect(String login) {
        if (StringUtils.isBlank(login)) {
-           throw new RuntimeException("Login: " + login + " is NULL or Empty");
+           throw new IllegalArgumentException("Login = %s is NULL or Empty".formatted(login));
        }
     }
 }
