@@ -16,8 +16,8 @@ public class AccountValidation {
     public void negativeBalance(Account account, BigDecimal amount) {
         BigDecimal balance = account.getMoneyAmount();
         if (balance.subtract(amount).signum() == -1) {
-            throw new RuntimeException("Insufficient balance: " + balance
-                    + " account id " + account.getAccountId());
+            throw new IllegalArgumentException(("No such money to transfer from account with id=%s, money amount=%s," +
+                    "attempted withdraw=%s".formatted(account.getAccountId(), account.getMoneyAmount(), amount)));
         }
     }
 }
