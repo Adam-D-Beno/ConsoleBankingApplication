@@ -43,14 +43,14 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void accountClose(UUID accountId) {
-         Account account = accountDao.getAccount()
+         Account account = accountDao.getAccounts()
                 .stream()
                 .filter(findAccount -> findAccount.getAccountId().equals(accountId))
                 .findFirst()
                 .orElseThrow(() -> new RuntimeException("No such account: id=%s".formatted(accountId)));
 
         if (hasNoAccounts(account)) {
-            throw new RuntimeException(("Account with id=%s cant delete, " +
+            throw new IllegalArgumentException(("Account with id=%s cant delete, " +
                     "because user have only one account").formatted(accountId));
         }
         accountDao.remove(accountId);
@@ -59,7 +59,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void accountDeposit(UUID accountId, BigDecimal amount) {
         accountValidation.negativeAmount(amount);
-        Account account = accountDao.getAccount(accountId)
+        Account account = accountDao.getAccounts(accountId)
                 .orElseThrow(() -> new IllegalArgumentException("Account not exist id=%s".formatted(accountId)));
         account.increaseAmount(amount);
     }
@@ -67,7 +67,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void accountWithdraw(UUID accountId, BigDecimal amount) {
         accountValidation.negativeAmount(amount);
-        Account account = accountDao.getAccount(accountId)
+        Account account = accountDao.getAccounts(accountId)
                 .orElseThrow(() -> new IllegalArgumentException("Account not exist id=%s".formatted(accountId)));
         accountValidation.negativeBalance(account, amount);
         account.decreaseAmount(amount);
@@ -76,10 +76,10 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void accountTransfer(UUID senderId, UUID recipientId, BigDecimal amount) {
         accountValidation.negativeAmount(amount);
-        Account fromAccount = accountDao.getAccount(senderId)
+        Account fromAccount = accountDao.getAccounts(senderId)
                 .orElseThrow(() -> new IllegalArgumentException("No such account: id=%s".formatted(senderId)));
         accountValidation.negativeBalance(fromAccount, amount);
-        Account toAccount = accountDao.getAccount(recipientId)
+        Account toAccount = accountDao.getAccounts(recipientId)
                 .orElseThrow(() -> new IllegalArgumentException("No such account: id=%s".formatted(recipientId)));
         isOwnAccountTransfer(fromAccount, toAccount);
         //todo change
