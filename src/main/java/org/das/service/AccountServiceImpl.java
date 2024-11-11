@@ -30,13 +30,12 @@ public class AccountServiceImpl implements AccountService {
     public Account create(UUID userId) {
         Account account = new Account(userId);
         setDefaultAmount(account);
-        accountDao.save(account);
-        return account;
+        return accountDao.save(account);
     }
 
     private void setDefaultAmount(Account account) {
         if (isFirstAccount(account)) {
-            account.decreaseAmount(BigDecimal.valueOf(accountProperties.getDefaultAmount()));
+            account.setMoneyAmount(BigDecimal.valueOf(accountProperties.getDefaultAmount()));
         }
     }
 
@@ -47,6 +46,7 @@ public class AccountServiceImpl implements AccountService {
                 .filter(findAccount -> findAccount.getAccountId().equals(accountId))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("No such account: id=%s".formatted(accountId)));
+
     }
 
     @Override
