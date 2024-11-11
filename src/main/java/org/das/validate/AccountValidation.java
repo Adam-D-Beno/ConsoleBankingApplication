@@ -9,7 +9,7 @@ public class AccountValidation {
 
     public void negativeAmount(BigDecimal amount) {
         if (amount.signum() == -1) {
-            throw new RuntimeException("Amount is negative: " + amount);
+            throw new IllegalArgumentException("Amount is negative: " + amount);
         }
     }
 
