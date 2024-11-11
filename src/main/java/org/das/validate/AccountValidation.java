@@ -4,7 +4,6 @@ import org.das.dao.AccountDao;
 import org.das.model.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import java.math.BigDecimal;
 import java.util.UUID;
 
@@ -32,7 +31,7 @@ public class AccountValidation {
     }
 
     public void accountAlreadyExist(UUID id) {
-        if (!accountDao.AccountExist(id)) {
+        if (accountDao.AccountExist(id)) {
             throw new RuntimeException("User with account id: " + id + " already exist");
         }
     }

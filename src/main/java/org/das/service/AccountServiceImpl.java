@@ -17,6 +17,8 @@ public class AccountServiceImpl implements AccountService {
     private final AccountValidation accountValidation;
     @Value("${account.default-amount}")
     private String defaultAmount;
+    @Value("${account.transfer-commission}")
+    private String transferCommission;
 
     @Autowired
     public AccountServiceImpl(UserDao userDao, AccountDao accountDao, AccountValidation accountValidation) {
@@ -29,7 +31,7 @@ public class AccountServiceImpl implements AccountService {
     public Account accountCreate(UUID userId) {
         Account account = new Account(userId);
         setDefaultAmount(account);
-        accountDao.saveAccount(account);
+        accountDao.save(account);
         return account;
     }
 
@@ -41,29 +43,32 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void accountClose(UUID accountId) {
-        accountValidation.accountAlreadyExist(accountId);
-        Account account = accountDao.getAccounts().get(accountId);
-        if (countSizeAccountByUser(account)) {
-            throw new RuntimeException("Account: " + account + " cant delete, because user have only one account");
+         Account account = accountDao.getAccount()
+                .stream()
+                .filter(findAccount -> findAccount.getAccountId().equals(accountId))
+                .findFirst()
+                .orElseThrow(() -> new RuntimeException("No such account: id=%s".formatted(accountId)));
+
+        if (hasNoAccounts(account)) {
+            throw new RuntimeException(("Account with id=%s cant delete, " +
+                    "because user have only one account").formatted(accountId));
         }
-        accountDao.getAccounts().remove(accountId);
+        accountDao.remove(accountId);
     }
 
     @Override
     public void accountDeposit(UUID accountId, BigDecimal amount) {
         accountValidation.negativeAmount(amount);
-        accountValidation.accountAlreadyExist(accountId);
-        Account account = accountDao.getAccounts(accountId)
-                .orElseThrow(() -> new RuntimeException("Account not exist"));
+        Account account = accountDao.getAccount(accountId)
+                .orElseThrow(() -> new IllegalArgumentException("Account not exist id=%s".formatted(accountId)));
         account.increaseAmount(amount);
     }
 
     @Override
     public void accountWithdraw(UUID accountId, BigDecimal amount) {
         accountValidation.negativeAmount(amount);
-        accountValidation.accountAlreadyExist(accountId);
-        Account account = accountDao.getAccounts(accountId)
-                .orElseThrow(() -> new RuntimeException("Account not exist"));
+        Account account = accountDao.getAccount(accountId)
+                .orElseThrow(() -> new IllegalArgumentException("Account not exist id=%s".formatted(accountId)));
         accountValidation.negativeBalance(account, amount);
         account.decreaseAmount(amount);
     }
@@ -71,24 +76,32 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void accountTransfer(UUID senderId, UUID recipientId, BigDecimal amount) {
         accountValidation.negativeAmount(amount);
-        accountValidation.accountAlreadyExist(senderId);
-        accountValidation.accountAlreadyExist(recipientId);
-        Account sender = accountDao.getAccounts(senderId)
-                .orElseThrow(() -> new RuntimeException("Account senderId not exist"));
-        accountValidation.negativeBalance(sender, amount);
-        Account recipient = accountDao.getAccounts(recipientId)
-                .orElseThrow(() -> new RuntimeException("Account recipientId not exist"));
-        sender.decreaseAmount(amount);
-        recipient.increaseAmount(amount);
+        Account fromAccount = accountDao.getAccount(senderId)
+                .orElseThrow(() -> new IllegalArgumentException("No such account: id=%s".formatted(senderId)));
+        accountValidation.negativeBalance(fromAccount, amount);
+        Account toAccount = accountDao.getAccount(recipientId)
+                .orElseThrow(() -> new IllegalArgumentException("No such account: id=%s".formatted(recipientId)));
+        isOwnAccountTransfer(fromAccount, toAccount);
+        //todo change
+        amount = amount.multiply(BigDecimal.valueOf(Double.parseDouble(transferCommission)));
+        fromAccount.decreaseAmount(amount);
+        toAccount.increaseAmount(amount);
     }
 
-    private boolean countSizeAccountByUser(Account account) {
-               return userDao.getUsers().values().stream()
+    private boolean hasNoAccounts(Account account) {
+               return userDao.getUsers().stream()
     .filter(user -> user.getUserId().equals(account.getUserId()))
     .anyMatch(user -> user.getAccounts().isEmpty());
     }
 
     private boolean isFirstAccount(Account account) {
-        return countSizeAccountByUser(account);
+        return hasNoAccounts(account);
+    }
+
+    private void isOwnAccountTransfer(Account fromAccount, Account toAccount) {
+        if (fromAccount.getUserId().equals(toAccount.getUserId())) {
+            throw new IllegalArgumentException("Account from id=%s and account to id=%s  transfer is same"
+                    .formatted(fromAccount.getAccountId(), toAccount.getAccountId()));
+        }
     }
 }
