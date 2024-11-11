@@ -31,8 +31,7 @@ public class AccountServiceImpl implements AccountService {
     public Account accountCreate(UUID userId) {
         Account account = new Account(userId);
         setDefaultAmount(account);
-        accountDao.save(account);
-        return account;
+        return accountDao.save(account);
     }
 
     private void setDefaultAmount(Account account) {
