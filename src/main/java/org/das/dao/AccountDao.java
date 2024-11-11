@@ -18,8 +18,9 @@ public class AccountDao {
         this.accounts = accounts;
     }
 
-    public void save(Account account) {
+    public Account save(Account account) {
         accounts.put(account.getAccountId(), account);
+        return account;
     }
 
     public Collection<Account> getAccounts() {
