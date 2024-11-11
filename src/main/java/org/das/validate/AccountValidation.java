@@ -31,7 +31,7 @@ public class AccountValidation {
     }
 
     public void accountAlreadyExist(UUID id) {
-        if (!accountDao.AccountExist(id)) {
+        if (accountDao.AccountExist(id)) {
             throw new RuntimeException("User with account id: " + id + " already exist");
         }
     }
