@@ -18,7 +18,7 @@ public class AccountDao {
         this.accounts = accounts;
     }
 
-    public void saveAccount(Account account) {
+    public void save(Account account) {
         accounts.put(account.getAccountId(), account);
     }
 
