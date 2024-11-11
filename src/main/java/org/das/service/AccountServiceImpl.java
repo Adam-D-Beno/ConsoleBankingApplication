@@ -36,7 +36,7 @@ public class AccountServiceImpl implements AccountService {
 
     private void setDefaultAmount(Account account) {
         if (isFirstAccount(account)) {
-            account.decreaseAmount(BigDecimal.valueOf(Double.parseDouble(defaultAmount)));
+            account.setMoneyAmount(BigDecimal.valueOf(Double.parseDouble(defaultAmount)));
         }
     }
 
