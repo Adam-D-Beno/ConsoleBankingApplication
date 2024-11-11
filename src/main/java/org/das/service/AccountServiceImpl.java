@@ -46,7 +46,11 @@ public class AccountServiceImpl implements AccountService {
                 .filter(findAccount -> findAccount.getAccountId().equals(accountId))
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("No such account: id=%s".formatted(accountId)));
-
+        if (hasNoAccounts(account)) {
+            throw new IllegalArgumentException(("Account with id=%s cant delete, " +
+                    "because user have only one account").formatted(accountId));
+        }
+        accountDao.remove(accountId);
     }
 
     @Override
