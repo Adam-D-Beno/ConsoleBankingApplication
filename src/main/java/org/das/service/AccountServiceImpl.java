@@ -78,7 +78,7 @@ public class AccountServiceImpl implements AccountService {
         accountValidation.negativeBalance(fromAccount, amount);
         Account toAccount = accountDao.getAccount(recipientId)
                 .orElseThrow(() -> new IllegalArgumentException("No such account: id=%s".formatted(recipientId)));
-        isOwnAccountTransfer(fromAccount, toAccount);
+        OwnAccountTransfer(fromAccount, toAccount);
         //todo change
         amount = amount.multiply(BigDecimal.valueOf(accountProperties.getTransferComission()));
         fromAccount.decreaseAmount(amount);
@@ -95,8 +95,8 @@ public class AccountServiceImpl implements AccountService {
         return hasNoAccounts(account);
     }
 
-    private void isOwnAccountTransfer(Account fromAccount, Account toAccount) {
-        if (fromAccount.getUserId().equals(toAccount.getUserId())) {
+    private void OwnAccountTransfer(Account fromAccount, Account toAccount) {
+        if (fromAccount.getAccountId().equals(toAccount.getAccountId())) {
             throw new IllegalArgumentException("Account from id=%s and account to id=%s  transfer is same"
                     .formatted(fromAccount.getAccountId(), toAccount.getAccountId()));
         }
