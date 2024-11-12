@@ -6,7 +6,6 @@ import org.das.model.Account;
 import org.das.utils.AccountProperties;
 import org.das.validate.AccountValidation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.util.UUID;
@@ -80,7 +79,7 @@ public class AccountServiceImpl implements AccountService {
         accountValidation.negativeBalance(fromAccount, amount);
         Account toAccount = accountDao.getAccounts(recipientId)
                 .orElseThrow(() -> new IllegalArgumentException("No such account: id=%s".formatted(recipientId)));
-        isOwnAccountTransfer(fromAccount, toAccount);
+        ownAccountTransfer(fromAccount, toAccount);
         //todo change
         amount = amount.multiply(BigDecimal.valueOf(Double.parseDouble(accountProperties.getTransferCommission())));
         fromAccount.decreaseAmount(amount);
@@ -97,7 +96,7 @@ public class AccountServiceImpl implements AccountService {
         return hasNoAccounts(account);
     }
 
-    private void isOwnAccountTransfer(Account fromAccount, Account toAccount) {
+    private void ownAccountTransfer(Account fromAccount, Account toAccount) {
         if (fromAccount.getAccountId().equals(toAccount.getAccountId())) {
             throw new IllegalArgumentException("Account from id=%s and account to id=%s  transfer is same"
                     .formatted(fromAccount.getAccountId(), toAccount.getAccountId()));
