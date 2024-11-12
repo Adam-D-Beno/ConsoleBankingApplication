@@ -1,23 +1,28 @@
 package org.das.service.oparations;
 
-import org.das.model.User;
+import org.das.model.Account;
+import org.das.service.AccountService;
 import org.das.service.UserService;
 import org.das.utils.ConsoleOperationType;
 import org.das.validate.UserValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import java.util.Scanner;
+import java.util.UUID;
 
 @Component
 public class CreateAccountCommand implements OperationCommand {
     private final UserValidation userValidation;
+    private final AccountService accountService;
     private final UserService userService;
 
     @Autowired
-    public CreateAccountCommand(UserValidation userValidation, UserService userService) {
+    public CreateAccountCommand(UserValidation userValidation, AccountService accountService, UserService userService) {
         this.userValidation = userValidation;
+        this.accountService = accountService;
         this.userService = userService;
     }
+
 
     @Override
     public ConsoleOperationType getOperationType() {
@@ -27,10 +32,11 @@ public class CreateAccountCommand implements OperationCommand {
     @Override
     public void execute() {
         Scanner scanner = new Scanner(System.in);
-        System.out.println("Please enter the login for new user ");
-        String login = scanner.nextLine();
-        userValidation.userLoginCorrect(login);
-        User user = userService.create(login);
-        System.out.println("User created successfully " + user.toString());
+        System.out.println("Enter the user id for which to create an account: ");
+        String userId = scanner.nextLine();
+        userValidation.userLoginCorrect(userId);
+        Account account = accountService.create(UUID.fromString(userId));
+        System.out.println("New account created with ID: " + account.getAccountId() +
+                userService.getUserById(account.getUserId()).get().getLogin());
     }
 }
