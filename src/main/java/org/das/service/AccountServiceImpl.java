@@ -35,7 +35,7 @@ public class AccountServiceImpl implements AccountService {
 
     private void setDefaultAmount(Account account) {
         if (isFirstAccount(account)) {
-            account.setMoneyAmount(BigDecimal.valueOf(Double.parseDouble(accountProperties.getDefaultAmount())));
+            account.setMoneyAmount(BigDecimal.valueOf(accountProperties.getDefaultAmount()));
         }
     }
 
@@ -81,7 +81,8 @@ public class AccountServiceImpl implements AccountService {
                 .orElseThrow(() -> new IllegalArgumentException("No such account: id=%s".formatted(recipientId)));
         ownAccountTransfer(fromAccount, toAccount);
         //todo change
-        amount = amount.multiply(BigDecimal.valueOf(Double.parseDouble(accountProperties.getTransferCommission())));
+//        (int) Math.round(amount * (1 - accountProperties.getTransferCommission()))
+        amount = amount.multiply(BigDecimal.valueOf(accountProperties.getTransferCommission()));
         fromAccount.decreaseAmount(amount);
         toAccount.increaseAmount(amount);
     }
