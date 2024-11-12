@@ -1,15 +1,27 @@
 package org.das.service.oparations;
 
+import org.das.service.UserService;
 import org.das.utils.ConsoleOperationType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
+@Component
 public class CreateShowAllUsersCommand implements OperationCommand {
+    private final UserService userService;
+
+    @Autowired
+    public CreateShowAllUsersCommand(UserService userService) {
+        this.userService = userService;
+    }
+
     @Override
     public void execute() {
-
+        System.out.println("List of all users: ");
+        userService.showAllUsers();
     }
 
     @Override
     public ConsoleOperationType getOperationType() {
-        return null;
+        return ConsoleOperationType.SHOW_ALL_USERS;
     }
 }
