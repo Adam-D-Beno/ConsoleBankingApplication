@@ -8,6 +8,7 @@ import org.das.validate.AccountValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.UUID;
 
 @Service
@@ -79,10 +80,15 @@ public class AccountServiceImpl implements AccountService {
         Account toAccount = accountDao.getAccount(recipientId)
                 .orElseThrow(() -> new IllegalArgumentException("No such account: id=%s".formatted(recipientId)));
         ownAccountTransfer(fromAccount, toAccount);
-        //todo change
-        amount = amount.multiply(BigDecimal.valueOf(accountProperties.getTransferCommission()));
+        BigDecimal amountAfterCommission = calculateAmountAfterCommission(amount);
         fromAccount.decreaseAmount(amount);
-        toAccount.increaseAmount(amount);
+        toAccount.increaseAmount(amountAfterCommission);
+    }
+
+    private BigDecimal calculateAmountAfterCommission(BigDecimal amount) {
+        BigDecimal commission = BigDecimal.valueOf(accountProperties.getTransferCommission());
+        BigDecimal multiplier = BigDecimal.ONE.subtract(commission);
+        return amount.multiply(multiplier).setScale(0, RoundingMode.HALF_UP);
     }
 
     private boolean hasNoAccounts(Account account) {
