@@ -18,7 +18,7 @@ public class AccountProperties {
         return defaultAmount;
     }
 
-    public double getTransferComission() {
+    public double getTransferCommission() {
         return transferComission;
     }
 
