@@ -3,6 +3,7 @@ package org.das.service;
 import org.das.dao.AccountDao;
 import org.das.dao.UserDao;
 import org.das.model.Account;
+import org.das.utils.AccountProperties;
 import org.das.validate.AccountValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,16 +16,15 @@ public class AccountServiceImpl implements AccountService {
     private final UserDao userDao;
     private final AccountDao accountDao;
     private final AccountValidation accountValidation;
-    @Value("${account.default-amount}")
-    private String defaultAmount;
-    @Value("${account.transfer-commission}")
-    private String transferCommission;
+   private final AccountProperties accountProperties;
 
     @Autowired
-    public AccountServiceImpl(UserDao userDao, AccountDao accountDao, AccountValidation accountValidation) {
+    public AccountServiceImpl(UserDao userDao, AccountDao accountDao,
+                              AccountValidation accountValidation, AccountProperties accountProperties) {
         this.userDao = userDao;
         this.accountDao = accountDao;
         this.accountValidation = accountValidation;
+        this.accountProperties = accountProperties;
     }
 
     @Override
@@ -36,7 +36,7 @@ public class AccountServiceImpl implements AccountService {
 
     private void setDefaultAmount(Account account) {
         if (isFirstAccount(account)) {
-            account.setMoneyAmount(BigDecimal.valueOf(Double.parseDouble(defaultAmount)));
+            account.setMoneyAmount(BigDecimal.valueOf(Double.parseDouble(accountProperties.getDefaultAmount())));
         }
     }
 
@@ -82,7 +82,7 @@ public class AccountServiceImpl implements AccountService {
                 .orElseThrow(() -> new IllegalArgumentException("No such account: id=%s".formatted(recipientId)));
         isOwnAccountTransfer(fromAccount, toAccount);
         //todo change
-        amount = amount.multiply(BigDecimal.valueOf(Double.parseDouble(transferCommission)));
+        amount = amount.multiply(BigDecimal.valueOf(Double.parseDouble(accountProperties.getTransferCommission())));
         fromAccount.decreaseAmount(amount);
         toAccount.increaseAmount(amount);
     }
@@ -98,7 +98,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     private void isOwnAccountTransfer(Account fromAccount, Account toAccount) {
-        if (fromAccount.getUserId().equals(toAccount.getUserId())) {
+        if (fromAccount.getAccountId().equals(toAccount.getAccountId())) {
             throw new IllegalArgumentException("Account from id=%s and account to id=%s  transfer is same"
                     .formatted(fromAccount.getAccountId(), toAccount.getAccountId()));
         }
