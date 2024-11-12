@@ -5,20 +5,20 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class AccountProperties {
-    private final String defaultAmount;
-    private final String transferCommission;
+    private final int defaultAmount;
+    private final double transferCommission;
 
-    public AccountProperties(@Value("${account.default-amount}") String defaultAmount,
-                             @Value("${account.transfer-commission}") String transferCommission) {
+    public AccountProperties(@Value("${account.default-amount}") int defaultAmount,
+                             @Value("${account.transfer-commission}") double transferCommission) {
         this.defaultAmount = defaultAmount;
         this.transferCommission = transferCommission;
     }
 
-    public String getDefaultAmount() {
+    public int getDefaultAmount() {
         return defaultAmount;
     }
 
-    public String getTransferCommission() {
+    public double getTransferCommission() {
         return transferCommission;
     }
 }
