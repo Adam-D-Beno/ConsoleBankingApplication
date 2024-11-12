@@ -80,7 +80,7 @@ public class AccountServiceImpl implements AccountService {
                 .orElseThrow(() -> new IllegalArgumentException("No such account: id=%s".formatted(recipientId)));
         ownAccountTransfer(fromAccount, toAccount);
         //todo change
-        amount = amount.multiply(BigDecimal.valueOf(accountProperties.getTransferComission()));
+        amount = amount.multiply(BigDecimal.valueOf(accountProperties.getTransferCommission()));
         fromAccount.decreaseAmount(amount);
         toAccount.increaseAmount(amount);
     }
