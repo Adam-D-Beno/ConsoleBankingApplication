@@ -1,50 +1,24 @@
 package org.das;
 
+import org.das.service.oparations.OperationCommand;
+import org.das.utils.ConsoleOperationType;
 import org.das.utils.ExecuteOperation;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.stereotype.Component;
+
+import java.util.List;
+import java.util.Map;
 import java.util.Scanner;
+@Component
+public class OperationsConsoleListener implements Runnable {
+    private Map<ConsoleOperationType, OperationCommand> commandMap;
 
-public class OperationsConsoleListener {
-    public static void main(String[] args) {
+    public OperationsConsoleListener(List<OperationCommand> commands) {
+        commands.forEach(command -> commandMap.put(command.getOperationType(), command));
+    }
 
-        AnnotationConfigApplicationContext context =
-                new AnnotationConfigApplicationContext("org.das");
-        ExecuteOperation executeOperation = context.getBean(ExecuteOperation.class);
-        Scanner scanner = new Scanner(System.in);
+    @Override
+    public void run() {
 
-        while (true) {
-            System.out.println("""
-                     Please enter one of operation type:
-                    -ACCOUNT_CREATE
-                    -SHOW_ALL_USERS
-                    -ACCOUNT_CLOSE
-                    -ACCOUNT_WITHDRAW
-                    -ACCOUNT_DEPOSIT
-                    -ACCOUNT_TRANSFER
-                    -USER_CREATE""");
-
-            String userEnter = scanner.nextLine();
-            if (userEnter.equals("ACCOUNT_CREATE")) {
-                executeOperation.executeOperationsAccountCreate(scanner);
-            }
-            if (userEnter.equals("SHOW_ALL_USERS")) {
-                executeOperation.showAllUsers();
-            }
-            if (userEnter.equals("ACCOUNT_CLOSE")) {
-                executeOperation.executeOperationsAccountClose(scanner);
-            }
-            if (userEnter.equals("ACCOUNT_WITHDRAW")) {
-                executeOperation.executeOperationsAccountWithdraw(scanner);
-            }
-            if (userEnter.equals("ACCOUNT_DEPOSIT")) {
-                executeOperation.executeOperationsAccountDeposit(scanner);
-            }
-            if (userEnter.equals("USER_CREATE")) {
-                executeOperation.executeOperationsUserCreate(scanner);
-            }
-            if (userEnter.equals("ACCOUNT_TRANSFER")) {
-                executeOperation.executeOperationsAccountTransfer(scanner);
-            }
-        }
     }
 }
