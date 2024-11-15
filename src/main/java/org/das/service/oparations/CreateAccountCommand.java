@@ -15,12 +15,14 @@ public class CreateAccountCommand implements OperationCommand {
     private final UserValidation userValidation;
     private final AccountService accountService;
     private final UserService userService;
+    private final Scanner scanner;
 
     @Autowired
-    public CreateAccountCommand(UserValidation userValidation, AccountService accountService, UserService userService) {
+    public CreateAccountCommand(UserValidation userValidation, AccountService accountService, UserService userService, Scanner scanner) {
         this.userValidation = userValidation;
         this.accountService = accountService;
         this.userService = userService;
+        this.scanner = scanner;
     }
 
 
@@ -31,7 +33,6 @@ public class CreateAccountCommand implements OperationCommand {
 
     @Override
     public void execute() {
-        Scanner scanner = new Scanner(System.in);
         System.out.println("Enter the user id for which to create an account: ");
         String userId = scanner.nextLine();
         userValidation.userLoginCorrect(userId);
