@@ -14,16 +14,17 @@ import java.util.UUID;
 public class CreateWithdrawCommand implements OperationCommand {
     private final UserValidation userValidation;
     private final AccountService accountService;
+    private final Scanner scanner;
 
     @Autowired
-    public CreateWithdrawCommand(UserValidation userValidation, AccountService accountService) {
+    public CreateWithdrawCommand(UserValidation userValidation, AccountService accountService, Scanner scanner) {
         this.userValidation = userValidation;
         this.accountService = accountService;
+        this.scanner = scanner;
     }
 
     @Override
     public void execute() {
-        Scanner scanner = new Scanner(System.in);
         System.out.println("Enter account ID to withdraw from: ");
         String accountId = scanner.nextLine();
         userValidation.userLoginCorrect(accountId);
