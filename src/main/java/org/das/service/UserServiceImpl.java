@@ -17,7 +17,7 @@ public class UserServiceImpl implements UserService {
     private final UserValidation userValidation;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao, AccountServiceImpl accountService, UserValidation userValidation) {
+    public UserServiceImpl(UserDao userDao, AccountService accountService, UserValidation userValidation) {
         this.userDao = userDao;
         this.accountService = accountService;
         this.userValidation = userValidation;
