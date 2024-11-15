@@ -11,9 +11,9 @@ public class User {
     private final String login;
     private final List<Account> accounts;
 
-    public User(String login) {
-        this.userId = UUID.randomUUID();
-        this.accounts = new ArrayList<>();
+    public User(UUID userId, String login, List<Account> accounts) {
+        this.userId = userId;
+        this.accounts = accounts;
         this.login = login;
     }
 
