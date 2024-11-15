@@ -13,16 +13,17 @@ import java.util.Scanner;
 public class CreateUserCommand implements OperationCommand {
     private final UserValidation userValidation;
     private final UserService userService;
+    private final Scanner scanner;
 
     @Autowired
-    public CreateUserCommand(UserValidation userValidation, UserService userService) {
+    public CreateUserCommand(UserValidation userValidation, UserService userService, Scanner scanner) {
         this.userValidation = userValidation;
         this.userService = userService;
+        this.scanner = scanner;
     }
 
     @Override
     public void execute() {
-        Scanner scanner = new Scanner(System.in);
         System.out.println("Please enter the login for new user ");
         String login = scanner.nextLine();
         userValidation.userLoginCorrect(login);
