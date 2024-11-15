@@ -13,9 +13,9 @@ public class Account {
 
     private BigDecimal moneyAmount;
 
-    public Account(UUID userId) {
+    public Account(UUID accountId, UUID userId) {
+        this.accountId = accountId;
         this.userId = userId;
-        this.accountId = UUID.randomUUID();
         this.moneyAmount = BigDecimal.ZERO;
     }
 
