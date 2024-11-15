@@ -10,7 +10,7 @@ public class OperationsConsoleListener {
         AnnotationConfigApplicationContext context =
                 new AnnotationConfigApplicationContext("org.das");
         ExecuteOperation executeOperation = context.getBean(ExecuteOperation.class);
-        Scanner scanner = new Scanner(System.in);
+        Scanner scanner = context.getBean(Scanner.class);
 
         while (true) {
             System.out.println("""
