@@ -44,6 +44,6 @@ public class UserServiceImpl implements UserService {
     }
 
     private UUID getRandomId() {
-        return   UUID.randomUUID();
+        return UUID.randomUUID();
     }
 }
