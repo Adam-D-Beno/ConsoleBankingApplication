@@ -12,16 +12,17 @@ import java.util.UUID;
 public class CreateCloseAccountCommand implements OperationCommand {
     private final UserValidation userValidation;
     private final AccountService accountService;
+    private final Scanner scanner;
 
     @Autowired
-    public CreateCloseAccountCommand(UserValidation userValidation, AccountService accountService) {
+    public CreateCloseAccountCommand(UserValidation userValidation, AccountService accountService, Scanner scanner) {
         this.userValidation = userValidation;
         this.accountService = accountService;
+        this.scanner = scanner;
     }
 
     @Override
     public void execute() {
-        Scanner scanner = new Scanner(System.in);
         System.out.println("Enter account ID to close: ");
         String accountId = scanner.nextLine();
         userValidation.userLoginCorrect(accountId);
