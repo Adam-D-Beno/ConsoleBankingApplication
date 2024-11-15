@@ -13,16 +13,17 @@ import java.util.UUID;
 public class CreateTransferCommand implements OperationCommand {
     private final UserValidation userValidation;
     private final AccountService accountService;
+    private final Scanner scanner;
 
     @Autowired
-    public CreateTransferCommand(UserValidation userValidation, AccountService accountService) {
+    public CreateTransferCommand(UserValidation userValidation, AccountService accountService, Scanner scanner) {
         this.userValidation = userValidation;
         this.accountService = accountService;
+        this.scanner = scanner;
     }
 
     @Override
     public void execute() {
-        Scanner scanner = new Scanner(System.in);
         System.out.println("Enter source account ID: ");
         String source = scanner.nextLine();
         userValidation.userLoginCorrect(source);
