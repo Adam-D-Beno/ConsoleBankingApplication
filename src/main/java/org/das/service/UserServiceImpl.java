@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
     public User userCreate(String login) {
         userValidation.userLoginCorrect(login);
         userValidation.userAlreadyExist(login);
-        User user = new User(login, new ArrayList<>());
+        User user = new User(getRandomId(), login, new ArrayList<>());
         userDao.saveUser(user);
         user.setAccounts(accountService.accountCreate(user.getUserId()));
         return user;
@@ -41,5 +41,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> getUserById(UUID id) {
         return userDao.getUser(id);
+    }
+
+    private UUID getRandomId() {
+        return   UUID.randomUUID();
     }
 }
