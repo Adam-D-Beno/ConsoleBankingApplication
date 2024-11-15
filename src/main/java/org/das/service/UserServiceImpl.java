@@ -17,7 +17,7 @@ public class UserServiceImpl implements UserService {
     private final UserValidation userValidation;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao, AccountServiceImpl accountService, UserValidation userValidation) {
+    public UserServiceImpl(UserDao userDao, AccountService accountService, UserValidation userValidation) {
         this.userDao = userDao;
         this.accountService = accountService;
         this.userValidation = userValidation;
@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
         userValidation.userAlreadyExist(login);
         User user = new User(getRandomId(), login, new ArrayList<>());
         userDao.saveUser(user);
-        user.setAccounts(accountService.create(user.getUserId()));
+        user.addAccount(accountService.create(user.getUserId()));
         return user;
     }
 
