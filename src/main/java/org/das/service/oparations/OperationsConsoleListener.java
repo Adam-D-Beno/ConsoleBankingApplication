@@ -9,15 +9,16 @@ import java.util.concurrent.ConcurrentHashMap;
 @Component
 public class OperationsConsoleListener implements Runnable {
     private Map<ConsoleOperationType, OperationCommand> commandMap;
+    private final Scanner scanner;
 
-    public OperationsConsoleListener(List<OperationCommand> commands) {
+    public OperationsConsoleListener(List<OperationCommand> commands, Scanner scanner) {
+        this.scanner = scanner;
         commandMap = new ConcurrentHashMap<>();
         commands.forEach(command -> commandMap.put(command.getOperationType(), command));
     }
 
     @Override
     public void run() {
-        Scanner scanner = new Scanner(System.in);
         while (true) {
             System.out.println("""
                      Please enter one of operation type:
