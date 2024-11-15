@@ -8,7 +8,6 @@ public class Main {
 
         AnnotationConfigApplicationContext context =
                 new AnnotationConfigApplicationContext("org.das");
-        OperationsConsoleListener operationsConsoleListener = context.getBean(OperationsConsoleListener.class);
-        operationsConsoleListener.run();
+        context.getBean(OperationsConsoleListener.class).run();
     }
 }
