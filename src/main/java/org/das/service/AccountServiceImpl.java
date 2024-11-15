@@ -29,9 +29,9 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account create(UUID userId) {
-        Account account = new Account(userId);
-        setDefaultAmount(account);
-        return accountDao.save(account);
+        Account newAccount = new Account(getRandomId(), userId);
+        setDefaultAmount(newAccount);
+        return accountDao.save(newAccount);
     }
 
     private void setDefaultAmount(Account account) {
@@ -106,6 +106,10 @@ public class AccountServiceImpl implements AccountService {
             throw new IllegalArgumentException("Account from id=%s and account to id=%s  transfer is same"
                     .formatted(fromAccount.getAccountId(), toAccount.getAccountId()));
         }
+    }
+
+    private UUID getRandomId() {
+        return UUID.randomUUID();
     }
 }
 
