@@ -5,6 +5,8 @@ import org.das.model.User;
 import org.das.validate.UserValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -25,7 +27,7 @@ public class UserServiceImpl implements UserService {
     public User create(String login) {
         userValidation.userLoginCorrect(login);
         userValidation.userAlreadyExist(login);
-        User user = new User(login);
+        User user = new User(getRandomId(), login, new ArrayList<>());
         userDao.saveUser(user);
         user.setAccounts(accountService.create(user.getUserId()));
         return user;
@@ -39,5 +41,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public Optional<User> getUserById(UUID id) {
         return userDao.getUser(id);
+    }
+
+    private UUID getRandomId() {
+        return UUID.randomUUID();
     }
 }
