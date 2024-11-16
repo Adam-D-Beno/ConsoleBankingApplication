@@ -42,7 +42,7 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public void close(UUID accountId) {
-        Account account = accountDao.getAccount()
+        Account account = accountDao.getAccounts()
                 .stream()
                 .filter(findAccount -> findAccount.getAccountId().equals(accountId))
                 .findFirst()
@@ -57,7 +57,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void deposit(UUID accountId, BigDecimal amount) {
         accountValidation.negativeAmount(amount);
-        Account account = accountDao.getAccount(accountId)
+        Account account = accountDao.getAccounts(accountId)
                 .orElseThrow(() -> new IllegalArgumentException("Account not exist id=%s".formatted(accountId)));
         account.increaseAmount(amount);
     }
@@ -65,7 +65,7 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void withdraw(UUID accountId, BigDecimal amount) {
         accountValidation.negativeAmount(amount);
-        Account account = accountDao.getAccount(accountId)
+        Account account = accountDao.getAccounts(accountId)
                 .orElseThrow(() -> new IllegalArgumentException("Account not exist id=%s".formatted(accountId)));
         accountValidation.negativeBalance(account, amount);
         account.decreaseAmount(amount);
@@ -74,10 +74,10 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public void transfer(UUID senderId, UUID recipientId, BigDecimal amount) {
         accountValidation.negativeAmount(amount);
-        Account fromAccount = accountDao.getAccount(senderId)
+        Account fromAccount = accountDao.getAccounts(senderId)
                 .orElseThrow(() -> new IllegalArgumentException("No such account: id=%s".formatted(senderId)));
         accountValidation.negativeBalance(fromAccount, amount);
-        Account toAccount = accountDao.getAccount(recipientId)
+        Account toAccount = accountDao.getAccounts(recipientId)
                 .orElseThrow(() -> new IllegalArgumentException("No such account: id=%s".formatted(recipientId)));
         ownAccountTransfer(fromAccount, toAccount);
         BigDecimal amountAfterCommission = calculateAmountAfterCommission(amount);
