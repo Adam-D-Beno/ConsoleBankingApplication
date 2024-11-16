@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 @Component
 public class OperationsConsoleListener implements Runnable {
-    private Map<ConsoleOperationType, OperationCommand> commandMap;
+    private final Map<ConsoleOperationType, OperationCommand> commandMap;
     private final Scanner scanner;
 
     public OperationsConsoleListener(List<OperationCommand> commands, Scanner scanner) {
