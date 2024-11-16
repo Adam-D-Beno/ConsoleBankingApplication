@@ -20,7 +20,19 @@ public class OperationsConsoleListener implements Runnable {
     @Override
     public void run() {
         while (true) {
-            System.out.println("""
+            String userInput = listenNextOperation();
+            try {
+                ConsoleOperationType operationType = ConsoleOperationType.valueOf(userInput.toUpperCase());
+                Optional.ofNullable(commandMap.get(operationType)).ifPresent(OperationCommand::execute);
+            } catch (Exception e) {
+                System.out.printf("Error executing command %s: error=%s%n", userInput, e.getMessage());
+                }
+            }
+        }
+    }
+
+    private String listenNextOperation() {
+        System.out.println("""
                      Please enter one of operation type:
                     -ACCOUNT_CREATE
                     -SHOW_ALL_USERS
@@ -30,13 +42,6 @@ public class OperationsConsoleListener implements Runnable {
                     -ACCOUNT_TRANSFER
                     -USER_CREATE""");
 
-            String userInput = scanner.nextLine();
-            try {
-                ConsoleOperationType operationType = ConsoleOperationType.valueOf(userInput.toUpperCase());
-                Optional.ofNullable(commandMap.get(operationType)).ifPresent(OperationCommand::execute);
-            } catch (IllegalArgumentException e) {
-                System.out.println("You command is wrong ");
-            }
-        }
+         return scanner.nextLine();
     }
 }
