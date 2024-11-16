@@ -26,22 +26,21 @@ public class OperationsConsoleListener implements Runnable {
                 Optional.ofNullable(commandMap.get(operationType)).ifPresent(OperationCommand::execute);
             } catch (Exception e) {
                 System.out.printf("Error executing command %s: error=%s%n", userInput, e.getMessage());
-                }
             }
         }
     }
 
     private String listenNextOperation() {
         System.out.println("""
-                     Please enter one of operation type:
-                    -ACCOUNT_CREATE
-                    -SHOW_ALL_USERS
-                    -ACCOUNT_CLOSE
-                    -ACCOUNT_WITHDRAW
-                    -ACCOUNT_DEPOSIT
-                    -ACCOUNT_TRANSFER
-                    -USER_CREATE""");
+                 Please enter one of operation type:
+                -ACCOUNT_CREATE
+                -SHOW_ALL_USERS
+                -ACCOUNT_CLOSE
+                -ACCOUNT_WITHDRAW
+                -ACCOUNT_DEPOSIT
+                -ACCOUNT_TRANSFER
+                -USER_CREATE""");
 
-         return scanner.nextLine();
+        return scanner.nextLine();
     }
 }
