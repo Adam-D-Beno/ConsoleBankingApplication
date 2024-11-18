@@ -18,7 +18,10 @@ public class CreateAccountCommand implements OperationCommand {
     private final Scanner scanner;
 
     @Autowired
-    public CreateAccountCommand(UserValidation userValidation, AccountService accountService, UserService userService, Scanner scanner) {
+    public CreateAccountCommand(UserValidation userValidation,
+                                AccountService accountService,
+                                UserService userService,
+                                Scanner scanner) {
         this.userValidation = userValidation;
         this.accountService = accountService;
         this.userService = userService;
