@@ -11,14 +11,14 @@ import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
 
-@Service
 public class UserServiceImpl implements UserService {
     private final UserDao userDao;
     private final AccountService accountService;
     private final UserValidation userValidation;
 
-    @Autowired
-    public UserServiceImpl(UserDao userDao, AccountService accountService, UserValidation userValidation) {
+    public UserServiceImpl(UserDao userDao,
+                           AccountService accountService,
+                           UserValidation userValidation) {
         this.userDao = userDao;
         this.accountService = accountService;
         this.userValidation = userValidation;
