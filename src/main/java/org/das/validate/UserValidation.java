@@ -5,11 +5,9 @@ import org.das.dao.UserDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component
 public class UserValidation {
     private final UserDao userDao;
 
-    @Autowired
     public UserValidation(UserDao userDao) {
         this.userDao = userDao;
     }
