@@ -3,9 +3,9 @@ package org.das;
 import org.das.utils.ConsoleOperationType;
 import org.das.utils.ExecuteOperation;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.Scanner;
 @Component
 public class OperationsConsoleListener {
@@ -19,7 +19,6 @@ public class OperationsConsoleListener {
     }
 
     public void listenUpdates() {
-
         while (true) {
             var operationType = listenNextOperation();
             try {
@@ -40,6 +39,7 @@ public class OperationsConsoleListener {
                     -ACCOUNT_DEPOSIT
                     -ACCOUNT_TRANSFER
                     -USER_CREATE""");
+
         while (true) {
             try {
                 var nextOperation = scanner.nextLine();
