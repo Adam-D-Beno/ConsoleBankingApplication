@@ -11,14 +11,12 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.UUID;
 
-@Service
 public class AccountServiceImpl implements AccountService {
     private final UserDao userDao;
     private final AccountDao accountDao;
     private final AccountValidation accountValidation;
    private final AccountProperties accountProperties;
 
-    @Autowired
     public AccountServiceImpl(UserDao userDao, AccountDao accountDao,
                               AccountValidation accountValidation, AccountProperties accountProperties) {
         this.userDao = userDao;
