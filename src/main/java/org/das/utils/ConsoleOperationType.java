@@ -1,6 +1,6 @@
 package org.das.utils;
 
-public class ConsoleOperationType {
+public enum ConsoleOperationType {
 
     ACCOUNT_CREATE,
     SHOW_ALL_USERS,
@@ -8,5 +8,5 @@ public class ConsoleOperationType {
     ACCOUNT_WITHDRAW,
     ACCOUNT_DEPOSIT,
     ACCOUNT_TRANSFER,
-    USER_CREATE;
+    USER_CREATE
 }
