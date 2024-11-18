@@ -5,16 +5,20 @@ import org.das.service.ExecuteOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.Map;
 import java.util.Scanner;
+import java.util.function.Consumer;
+
 @Component
 public class OperationsConsoleListener {
     private final Scanner scanner;
-    private final ExecuteOperation executeOperation;
+    private final Map<ConsoleOperationType, Consumer<Scanner>> operationMap;
 
     @Autowired
-    public OperationsConsoleListener(Scanner scanner, ExecuteOperation executeOperation) {
+    public OperationsConsoleListener(Scanner scanner,
+                                     Map<ConsoleOperationType, Consumer<Scanner>> operationMap) {
         this.scanner = scanner;
-        this.executeOperation = executeOperation;
+        this.operationMap = operationMap;
     }
 
     public void listenUpdates() {
@@ -50,33 +54,6 @@ public class OperationsConsoleListener {
     }
 
     private void processNextOperation(ConsoleOperationType operation) {
-
-        if (operation.equals(ConsoleOperationType.ACCOUNT_CREATE)) {
-            executeOperation.executeOperationsAccountCreate(scanner);
-            return;
-        }
-        if (operation.equals(ConsoleOperationType.SHOW_ALL_USERS)) {
-            executeOperation.showAllUsers();
-            return;
-        }
-        if (operation.equals(ConsoleOperationType.ACCOUNT_CLOSE)) {
-            executeOperation.executeOperationsAccountClose(scanner);
-            return;
-        }
-        if (operation.equals(ConsoleOperationType.ACCOUNT_WITHDRAW)) {
-            executeOperation.executeOperationsAccountWithdraw(scanner);
-            return;
-        }
-        if (operation.equals(ConsoleOperationType.ACCOUNT_DEPOSIT)) {
-            executeOperation.executeOperationsAccountDeposit(scanner);
-            return;
-        }
-        if (operation.equals(ConsoleOperationType.USER_CREATE)) {
-            executeOperation.executeOperationsUserCreate(scanner);
-            return;
-        }
-        if (operation.equals(ConsoleOperationType.ACCOUNT_TRANSFER)) {
-            executeOperation.executeOperationsAccountTransfer(scanner);
-        }
+        operationMap.get(operation).accept(scanner);
     }
 }
