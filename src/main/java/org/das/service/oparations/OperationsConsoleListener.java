@@ -15,7 +15,6 @@ public class OperationsConsoleListener implements Runnable {
         this.scanner = scanner;
     }
 
-
     @Override
     public void run() {
         listenUpdates();
