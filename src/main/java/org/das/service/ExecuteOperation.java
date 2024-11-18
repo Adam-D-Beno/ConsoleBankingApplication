@@ -1,9 +1,7 @@
-package org.das.utils;
+package org.das.service;
 
 import org.das.model.Account;
 import org.das.model.User;
-import org.das.service.AccountService;
-import org.das.service.UserService;
 import org.das.validate.UserValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
@@ -13,9 +11,9 @@ import java.util.UUID;
 
 @Component
 public class ExecuteOperation {
-    private final UserValidation userValidation;
-    private final UserService userService;
-    private final AccountService accountService;
+    private  final UserValidation userValidation;
+    private  final UserService userService;
+    private  final AccountService accountService;
 
     @Autowired
     public ExecuteOperation(UserValidation userValidation, UserService userService,
@@ -25,7 +23,7 @@ public class ExecuteOperation {
         this.accountService = accountService;
     }
 
-    public void executeOperationsUserCreate(Scanner scanner) {
+    public void executeOperationsUserCreate(Object scanner) {
         System.out.println("Please enter the login for new user ");
         String login = scanner.nextLine();
         userValidation.userLoginCorrect(login);
