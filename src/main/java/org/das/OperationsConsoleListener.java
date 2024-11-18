@@ -54,21 +54,27 @@ public class OperationsConsoleListener {
 
         if (operation.equals(ConsoleOperationType.ACCOUNT_CREATE)) {
             executeOperation.executeOperationsAccountCreate(scanner);
+            return;
         }
         if (operation.equals(ConsoleOperationType.SHOW_ALL_USERS)) {
             executeOperation.showAllUsers();
+            return;
         }
         if (operation.equals(ConsoleOperationType.ACCOUNT_CLOSE)) {
             executeOperation.executeOperationsAccountClose(scanner);
+            return;
         }
         if (operation.equals(ConsoleOperationType.ACCOUNT_WITHDRAW)) {
             executeOperation.executeOperationsAccountWithdraw(scanner);
+            return;
         }
         if (operation.equals(ConsoleOperationType.ACCOUNT_DEPOSIT)) {
             executeOperation.executeOperationsAccountDeposit(scanner);
+            return;
         }
         if (operation.equals(ConsoleOperationType.USER_CREATE)) {
             executeOperation.executeOperationsUserCreate(scanner);
+            return;
         }
         if (operation.equals(ConsoleOperationType.ACCOUNT_TRANSFER)) {
             executeOperation.executeOperationsAccountTransfer(scanner);
