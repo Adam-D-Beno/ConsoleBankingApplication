@@ -4,7 +4,6 @@ import org.das.model.Account;
 import org.springframework.stereotype.Component;
 import java.math.BigDecimal;
 
-@Component
 public class AccountValidation {
 
     public void negativeAmount(BigDecimal amount) {
