@@ -10,10 +10,10 @@ public class OperationsConsoleListener implements Runnable {
     private final Map<ConsoleOperationType, OperationCommand> commandMap;
     private final Scanner scanner;
 
-    public OperationsConsoleListener(List<OperationCommand> commands, Scanner scanner) {
+    public OperationsConsoleListener(Map<ConsoleOperationType,
+            OperationCommand> commandMap, Scanner scanner) {
+        this.commandMap = commandMap;
         this.scanner = scanner;
-        commandMap = new ConcurrentHashMap<>();
-        commands.forEach(command -> commandMap.put(command.getOperationType(), command));
     }
 
 
