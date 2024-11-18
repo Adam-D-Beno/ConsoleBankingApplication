@@ -1,5 +1,6 @@
-package org.das.service.oparations;
+package org.das.config;
 
+import org.das.service.oparations.OperationCommand;
 import org.das.utils.ConsoleOperationType;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
