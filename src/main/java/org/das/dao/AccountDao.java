@@ -9,11 +9,9 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
-@Component
 public class AccountDao {
     private final Map<UUID, Account> accounts;
 
-    @Autowired
     public AccountDao(Map<UUID, Account> accounts) {
         this.accounts = accounts;
     }
