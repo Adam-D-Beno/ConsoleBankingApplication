@@ -9,21 +9,20 @@ import java.math.BigDecimal;
 import java.util.Scanner;
 import java.util.UUID;
 
-@Component
 public class ExecuteOperation {
     private  final UserValidation userValidation;
     private  final UserService userService;
     private  final AccountService accountService;
 
-    @Autowired
-    public ExecuteOperation(UserValidation userValidation, UserService userService,
+    public ExecuteOperation(UserValidation userValidation,
+                            UserService userService,
                             AccountService accountService) {
         this.userValidation = userValidation;
         this.userService = userService;
         this.accountService = accountService;
     }
 
-    public void executeOperationsUserCreate(Object scanner) {
+    public void executeOperationsUserCreate(Scanner scanner) {
         System.out.println("Please enter the login for new user ");
         String login = scanner.nextLine();
         userValidation.userLoginCorrect(login);
