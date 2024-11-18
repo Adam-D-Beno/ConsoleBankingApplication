@@ -1,5 +1,6 @@
 package org.das;
 
+import org.das.utils.ConsoleOperationType;
 import org.das.utils.ExecuteOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
@@ -20,7 +21,7 @@ public class OperationsConsoleListener {
     public void listenUpdates() {
 
         while (true) {
-            String operationType = listenNextOperation();
+            var operationType = listenNextOperation();
             try {
                 processNextOperation(operationType);
             } catch (Exception e) {
@@ -29,7 +30,7 @@ public class OperationsConsoleListener {
         }
     }
 
-    private String listenNextOperation() {
+    private ConsoleOperationType listenNextOperation() {
         System.out.println("""
                      Please enter one of operation type:
                     -ACCOUNT_CREATE
@@ -39,31 +40,37 @@ public class OperationsConsoleListener {
                     -ACCOUNT_DEPOSIT
                     -ACCOUNT_TRANSFER
                     -USER_CREATE""");
-
-        return scanner.nextLine();
+        while (true) {
+            try {
+                var nextOperation = scanner.nextLine();
+                return ConsoleOperationType.valueOf(nextOperation);
+            } catch (IllegalArgumentException e) {
+                System.out.println("No such command ");
+            }
+        }
     }
 
-    private void processNextOperation(String operation) {
+    private void processNextOperation(ConsoleOperationType operation) {
 
-        if (operation.equals("ACCOUNT_CREATE")) {
+        if (operation.equals(ConsoleOperationType.ACCOUNT_CREATE)) {
             executeOperation.executeOperationsAccountCreate(scanner);
         }
-        if (operation.equals("SHOW_ALL_USERS")) {
+        if (operation.equals(ConsoleOperationType.SHOW_ALL_USERS)) {
             executeOperation.showAllUsers();
         }
-        if (operation.equals("ACCOUNT_CLOSE")) {
+        if (operation.equals(ConsoleOperationType.ACCOUNT_CLOSE)) {
             executeOperation.executeOperationsAccountClose(scanner);
         }
-        if (operation.equals("ACCOUNT_WITHDRAW")) {
+        if (operation.equals(ConsoleOperationType.ACCOUNT_WITHDRAW)) {
             executeOperation.executeOperationsAccountWithdraw(scanner);
         }
-        if (operation.equals("ACCOUNT_DEPOSIT")) {
+        if (operation.equals(ConsoleOperationType.ACCOUNT_DEPOSIT)) {
             executeOperation.executeOperationsAccountDeposit(scanner);
         }
-        if (operation.equals("USER_CREATE")) {
+        if (operation.equals(ConsoleOperationType.USER_CREATE)) {
             executeOperation.executeOperationsUserCreate(scanner);
         }
-        if (operation.equals("ACCOUNT_TRANSFER")) {
+        if (operation.equals(ConsoleOperationType.ACCOUNT_TRANSFER)) {
             executeOperation.executeOperationsAccountTransfer(scanner);
         }
     }
