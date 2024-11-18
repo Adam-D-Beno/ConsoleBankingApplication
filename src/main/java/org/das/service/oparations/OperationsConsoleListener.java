@@ -2,7 +2,6 @@ package org.das.service.oparations;
 
 import org.das.utils.ConsoleOperationType;
 import org.springframework.stereotype.Component;
-
 import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -17,20 +16,28 @@ public class OperationsConsoleListener implements Runnable {
         commands.forEach(command -> commandMap.put(command.getOperationType(), command));
     }
 
+
     @Override
     public void run() {
+        listenUpdates();
+    }
+
+    private void listenUpdates() {
         while (true) {
-            String userInput = listenNextOperation();
-            try {
-                ConsoleOperationType operationType = ConsoleOperationType.valueOf(userInput.toUpperCase());
-                Optional.ofNullable(commandMap.get(operationType)).ifPresent(OperationCommand::execute);
-            } catch (Exception e) {
-                System.out.printf("Error executing command %s: error=%s%n", userInput, e.getMessage());
-            }
+            var nextOperation =  listenNextOperation();
+            processNextOperation(nextOperation);
         }
     }
 
-    private String listenNextOperation() {
+    private void processNextOperation(ConsoleOperationType operation) {
+        try {
+          commandMap.get(operation).execute();
+        } catch (Exception e) {
+            System.out.printf("Error executing command %s: error=%s%n", operation, e.getMessage());
+        }
+    }
+
+    private ConsoleOperationType listenNextOperation() {
         System.out.println("""
                  Please enter one of operation type:
                 -ACCOUNT_CREATE
@@ -40,7 +47,13 @@ public class OperationsConsoleListener implements Runnable {
                 -ACCOUNT_DEPOSIT
                 -ACCOUNT_TRANSFER
                 -USER_CREATE""");
-
-        return scanner.nextLine();
+        while (true) {
+         var nextOperation = scanner.nextLine();
+            try{
+                return ConsoleOperationType.valueOf(nextOperation.toUpperCase());
+            } catch (IllegalArgumentException e) {
+                System.out.println("No such command found");
+            }
+        }
     }
 }
