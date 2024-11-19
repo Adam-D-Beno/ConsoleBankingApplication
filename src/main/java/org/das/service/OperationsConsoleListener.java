@@ -1,5 +1,6 @@
-package org.das.service.oparations;
+package org.das.service;
 
+import org.das.service.oparations.OperationCommand;
 import org.das.utils.ConsoleOperationType;
 import org.springframework.stereotype.Component;
 import java.util.*;
