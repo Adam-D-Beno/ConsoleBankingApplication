@@ -6,11 +6,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 @Component
-public class CreateShowAllUsersCommand implements OperationCommand {
+public class ShowAllUsersCommand implements OperationCommand {
     private final UserService userService;
 
     @Autowired
-    public CreateShowAllUsersCommand(UserService userService) {
+    public ShowAllUsersCommand(UserService userService) {
         this.userService = userService;
     }
 
