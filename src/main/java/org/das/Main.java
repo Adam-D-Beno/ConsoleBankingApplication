@@ -1,6 +1,6 @@
 package org.das;
 
-import org.das.service.oparations.OperationsConsoleListener;
+import org.das.service.OperationsConsoleListener;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class Main {
