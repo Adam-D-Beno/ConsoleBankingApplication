@@ -11,13 +11,13 @@ import java.util.Scanner;
 import java.util.UUID;
 
 @Component
-public class CreateWithdrawCommand implements OperationCommand {
+public class WithdrawCommand implements OperationCommand {
     private final UserValidation userValidation;
     private final AccountService accountService;
     private final Scanner scanner;
 
     @Autowired
-    public CreateWithdrawCommand(UserValidation userValidation, AccountService accountService, Scanner scanner) {
+    public WithdrawCommand(UserValidation userValidation, AccountService accountService, Scanner scanner) {
         this.userValidation = userValidation;
         this.accountService = accountService;
         this.scanner = scanner;
