@@ -10,13 +10,13 @@ import java.util.Scanner;
 import java.util.UUID;
 
 @Component
-public class CreateTransferCommand implements OperationCommand {
+public class TransferCommand implements OperationCommand {
     private final UserValidation userValidation;
     private final AccountService accountService;
     private final Scanner scanner;
 
     @Autowired
-    public CreateTransferCommand(UserValidation userValidation, AccountService accountService, Scanner scanner) {
+    public TransferCommand(UserValidation userValidation, AccountService accountService, Scanner scanner) {
         this.userValidation = userValidation;
         this.accountService = accountService;
         this.scanner = scanner;
