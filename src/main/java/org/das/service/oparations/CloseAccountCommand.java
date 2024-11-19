@@ -9,13 +9,13 @@ import org.springframework.stereotype.Component;
 import java.util.Scanner;
 import java.util.UUID;
 @Component
-public class CreateCloseAccountCommand implements OperationCommand {
+public class CloseAccountCommand implements OperationCommand {
     private final UserValidation userValidation;
     private final AccountService accountService;
     private final Scanner scanner;
 
     @Autowired
-    public CreateCloseAccountCommand(UserValidation userValidation, AccountService accountService, Scanner scanner) {
+    public CloseAccountCommand(UserValidation userValidation, AccountService accountService, Scanner scanner) {
         this.userValidation = userValidation;
         this.accountService = accountService;
         this.scanner = scanner;
