@@ -32,15 +32,8 @@ public class OperationsConsoleListener {
     }
 
     private ConsoleOperationType listenNextOperation() {
-        System.out.println("""
-                     Please enter one of operation type:
-                    -ACCOUNT_CREATE
-                    -SHOW_ALL_USERS
-                    -ACCOUNT_CLOSE
-                    -ACCOUNT_WITHDRAW
-                    -ACCOUNT_DEPOSIT
-                    -ACCOUNT_TRANSFER
-                    -USER_CREATE""");
+        System.out.println("Please enter one of operation type");
+        printAllAvailableOperation();
 
         while (true) {
             try {
@@ -50,6 +43,10 @@ public class OperationsConsoleListener {
                 System.out.println("No such command ");
             }
         }
+    }
+
+    private void printAllAvailableOperation() {
+        operationMap.keySet().forEach(System.out::println);
     }
 
     private void processNextOperation(ConsoleOperationType operation) {
