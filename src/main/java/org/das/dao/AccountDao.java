@@ -25,7 +25,7 @@ public class AccountDao {
         return accounts.values();
     }
 
-    public Optional<Account> getAccounts(UUID id) {
+    public Optional<Account> getAccount(UUID id) {
         return Optional.ofNullable(accounts.get(id));
     }
 
