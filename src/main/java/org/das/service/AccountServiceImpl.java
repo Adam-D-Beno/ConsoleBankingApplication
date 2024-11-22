@@ -9,7 +9,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class AccountServiceImpl implements AccountService {
@@ -41,8 +44,8 @@ public class AccountServiceImpl implements AccountService {
     }
 
     @Override
-    public void close(UUID accountId) {
-        Account account = accountDao.getAccount()
+    public Account close(UUID accountId) {
+        Account account = accountDao.getAccounts()
                 .stream()
                 .filter(findAccount -> findAccount.getAccountId().equals(accountId))
                 .findFirst()
@@ -52,6 +55,7 @@ public class AccountServiceImpl implements AccountService {
                     "because user have only one account").formatted(accountId));
         }
         accountDao.remove(accountId);
+        return account;
     }
 
     @Override
