@@ -20,4 +20,12 @@ public class AccountValidation {
                     "attempted withdraw=%s".formatted(account.getAccountId(), account.getMoneyAmount(), amount)));
         }
     }
+
+
+    public void validateDifferentAccounts(Account fromAccount, Account toAccount) {
+        if (fromAccount.getAccountId().equals(toAccount.getAccountId())) {
+            throw new IllegalArgumentException("Account from id=%s and account to id=%s  transfer is same"
+                    .formatted(fromAccount.getAccountId(), toAccount.getAccountId()));
+        }
+    }
 }
