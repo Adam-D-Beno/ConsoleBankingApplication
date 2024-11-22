@@ -29,10 +29,6 @@ public class AccountDao {
         return Optional.ofNullable(accounts.get(id));
     }
 
-    public boolean AccountExist(UUID id) {
-        return accounts.containsKey(id);
-    }
-
     public void remove(UUID accountId) {
         accounts.remove(accountId);
     }
