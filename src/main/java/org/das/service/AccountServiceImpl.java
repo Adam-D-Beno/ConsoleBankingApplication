@@ -114,7 +114,6 @@ public class AccountServiceImpl implements AccountService {
     private Account getAccount(UUID accountId) {
         return accountDao.getAccount(accountId)
                 .orElseThrow(() -> new IllegalArgumentException("Account not exist id=%s".formatted(accountId)));
-
     }
 
     public List<Account> getAllUserAccounts(UUID userId) {
