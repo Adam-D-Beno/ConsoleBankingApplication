@@ -17,8 +17,9 @@ public class UserDao {
         return getUsers().stream().filter(user -> user.getUserId().equals(id)).findFirst();
     }
 
-    public void saveUser(User user) {
+    public User saveUser(User user) {
         this.users.put(user.getLogin(), user);
+        return user;
     }
 
     public Collection<User> getUsers() {
