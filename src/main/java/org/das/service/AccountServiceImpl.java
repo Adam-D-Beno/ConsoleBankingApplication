@@ -29,7 +29,6 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account create(UUID userId) {
         Account newAccount = new Account(getRandomId(), userId);
-        //todo wich acc use
         if (isFirstAccount(newAccount.getUserId())) {
             newAccount.setMoneyAmount(BigDecimal.valueOf(accountProperties.getDefaultAmount()));
         }
