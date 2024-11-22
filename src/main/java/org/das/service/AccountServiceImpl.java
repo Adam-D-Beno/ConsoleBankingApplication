@@ -3,6 +3,7 @@ package org.das.service;
 import org.das.dao.AccountDao;
 import org.das.dao.UserDao;
 import org.das.model.Account;
+import org.das.model.User;
 import org.das.utils.AccountProperties;
 import org.das.validate.AccountValidation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.List;
 import java.util.UUID;
 
 @Service
@@ -44,8 +46,21 @@ public class AccountServiceImpl implements AccountService {
             throw new IllegalArgumentException(("Account with id=%s cant delete, " +
                     "because user have only one account").formatted(accountId));
         }
+        if (account.getMoneyAmount().doubleValue() >= 1) {
+            var accountNextId = getAccountNextId(account);
+            transfer(account.getAccountId(), accountNextId, account.getMoneyAmount());
+        }
         accountDao.remove(accountId);
         return account;
+    }
+
+    private UUID getAccountNextId(Account account) {
+         return getAllUserAccounts(account.getUserId()).stream()
+                .map(Account::getAccountId)
+                .filter(id -> !id.equals(account.getAccountId()))
+                .findFirst()
+                .orElseThrow(() -> new IllegalArgumentException("No such account id=%s to transfer for user id=%s"
+                        .formatted(account.getAccountId(), account.getUserId())));
     }
 
     @Override
@@ -68,10 +83,19 @@ public class AccountServiceImpl implements AccountService {
         accountValidation.negativeAmount(amount);
         Account fromAccount = getAccount(senderId);
         Account toAccount = getAccount(recipientId);
-        accountValidation.validateDifferentAccounts(fromAccount, toAccount);
+        //todo приходят разные ид аккаунтов
+        if (validateDifferentAccounts(fromAccount, toAccount)) {
+            fromAccount.decreaseAmount(amount);
+            toAccount.increaseAmount(amount);
+            return;
+        }
         BigDecimal amountAfterCommission = calculateAmountAfterCommission(amount);
         fromAccount.decreaseAmount(amount);
         toAccount.increaseAmount(amountAfterCommission);
+    }
+
+    public boolean validateDifferentAccounts(Account fromAccount, Account toAccount) {
+      return fromAccount.getAccountId().equals(toAccount.getAccountId());
     }
 
     private BigDecimal calculateAmountAfterCommission(BigDecimal amount) {
@@ -79,6 +103,7 @@ public class AccountServiceImpl implements AccountService {
         return amount.multiply(BigDecimal.ONE.subtract(commission)).setScale(2, RoundingMode.HALF_UP);
     }
 
+    //todo replace on accountDao....
     private boolean isOnlyAccount(UUID userId) {
         return userDao.getUser(userId)
                 .map(user -> user.getAccounts().size() <= 1)
@@ -97,6 +122,12 @@ public class AccountServiceImpl implements AccountService {
         return accountDao.getAccount(accountId)
                 .orElseThrow(() -> new IllegalArgumentException("Account not exist id=%s".formatted(accountId)));
 
+    }
+
+    public List<Account> getAllUserAccounts(UUID userId) {
+          return   accountDao.getAllAccounts().stream()
+                  .filter(account -> account.getUserId().equals(userId))
+                  .toList();
     }
 }
 
