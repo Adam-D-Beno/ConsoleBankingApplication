@@ -1,9 +1,7 @@
 package org.das.service;
 
 import org.das.dao.AccountDao;
-import org.das.dao.UserDao;
 import org.das.model.Account;
-import org.das.model.User;
 import org.das.utils.AccountProperties;
 import org.das.validate.AccountValidation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -101,7 +99,7 @@ public class AccountServiceImpl implements AccountService {
         BigDecimal commission = BigDecimal.valueOf(accountProperties.getTransferCommission());
         return amount.multiply(BigDecimal.ONE.subtract(commission)).setScale(2, RoundingMode.HALF_UP);
     }
-    // todo replace
+
     private boolean isOnlyAccount(UUID userId) {
         return getAllUserAccounts(userId).isEmpty();
     }
