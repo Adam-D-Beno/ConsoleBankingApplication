@@ -7,7 +7,7 @@ import java.util.UUID;
 
 public interface AccountService {
     Account create(UUID userId);
-    void close(UUID accountId);
+    Account close(UUID accountId);
     void deposit(UUID accountId, BigDecimal amount);
     void transfer(UUID senderId, UUID recipientId, BigDecimal amount);
     void withdraw(UUID accountId, BigDecimal amount);
