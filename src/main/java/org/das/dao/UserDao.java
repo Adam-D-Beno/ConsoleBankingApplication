@@ -25,8 +25,8 @@ public class UserDao {
         this.users.put(user.getLogin(), user);
     }
 
-    public ArrayList<User> getUsers() {
-        return new ArrayList<>(users.values());
+    public Collection<User> getUsers() {
+        return users.values();
     }
 
     public boolean userExist(String login) {
