@@ -1,13 +1,12 @@
 package org.das.service;
 
-import org.das.dao.AccountDao;
+
 import org.das.dao.UserDao;
 import org.das.model.Account;
 import org.das.model.User;
 import org.das.validate.UserValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.Optional;
 import java.util.UUID;
@@ -32,9 +31,9 @@ public class UserServiceImpl implements UserService {
         userValidation.userLoginCorrect(login);
         userValidation.userAlreadyExist(login);
         User newUser = new User(getRandomId(), login, new ArrayList<>());
+        userDao.saveUser(newUser);
         Account newAccount = accountService.create(newUser.getUserId());
         newUser.addAccount(newAccount);
-        userDao.saveUser(newUser);
         return newUser;
     }
 
