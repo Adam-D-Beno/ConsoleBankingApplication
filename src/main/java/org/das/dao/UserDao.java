@@ -1,8 +1,6 @@
 package org.das.dao;
 
 import org.das.model.User;
-import org.springframework.stereotype.Component;
-
 import java.util.*;
 
 public class UserDao {
@@ -10,10 +8,6 @@ public class UserDao {
 
     public UserDao() {
         this.users = new HashMap<>();
-    }
-
-    public Optional<User> getUser(String login) {
-        return Optional.ofNullable(users.get(login));
     }
 
     public Optional<User> getUser(UUID id) {
