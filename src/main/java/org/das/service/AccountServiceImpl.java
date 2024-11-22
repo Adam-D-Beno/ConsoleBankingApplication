@@ -3,7 +3,6 @@ package org.das.service;
 import org.das.dao.AccountDao;
 import org.das.dao.UserDao;
 import org.das.model.Account;
-import org.das.model.User;
 import org.das.utils.AccountProperties;
 import org.das.validate.AccountValidation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -83,8 +82,8 @@ public class AccountServiceImpl implements AccountService {
         accountValidation.negativeAmount(amount);
         Account fromAccount = getAccount(senderId);
         Account toAccount = getAccount(recipientId);
-        //todo приходят разные ид аккаунтов
-        if (validateDifferentAccounts(fromAccount, toAccount)) {
+        accountValidation.isSameAccount(fromAccount, toAccount);
+        if (isAccountOneUser(fromAccount, toAccount)) {
             fromAccount.decreaseAmount(amount);
             toAccount.increaseAmount(amount);
             return;
@@ -94,8 +93,8 @@ public class AccountServiceImpl implements AccountService {
         toAccount.increaseAmount(amountAfterCommission);
     }
 
-    public boolean validateDifferentAccounts(Account fromAccount, Account toAccount) {
-      return fromAccount.getAccountId().equals(toAccount.getAccountId());
+    private boolean isAccountOneUser(Account fromAccount, Account toAccount) {
+        return fromAccount.getUserId().equals(toAccount.getUserId());
     }
 
     private BigDecimal calculateAmountAfterCommission(BigDecimal amount) {
