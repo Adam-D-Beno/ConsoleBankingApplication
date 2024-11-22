@@ -1,6 +1,8 @@
 package org.das.service;
 
+import org.das.dao.AccountDao;
 import org.das.dao.UserDao;
+import org.das.model.Account;
 import org.das.model.User;
 import org.das.validate.UserValidation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +15,14 @@ import java.util.UUID;
 @Service
 public class UserServiceImpl implements UserService {
     private final UserDao userDao;
+    private final AccountDao accountDao;
     private final AccountService accountService;
     private final UserValidation userValidation;
 
     @Autowired
-    public UserServiceImpl(UserDao userDao, AccountService accountService, UserValidation userValidation) {
+    public UserServiceImpl(UserDao userDao, AccountDao accountDao, AccountService accountService, UserValidation userValidation) {
         this.userDao = userDao;
+        this.accountDao = accountDao;
         this.accountService = accountService;
         this.userValidation = userValidation;
     }
@@ -29,7 +33,9 @@ public class UserServiceImpl implements UserService {
         userValidation.userAlreadyExist(login);
         User newUser = new User(getRandomId(), login, new ArrayList<>());
         userDao.saveUser(newUser);
-        newUser.addAccount(accountService.create(newUser.getUserId()));
+        Account newAccount = accountService.create(newUser.getUserId());
+        accountDao.save(newAccount);
+        newUser.addAccount(newAccount);
         return newUser;
     }
 
