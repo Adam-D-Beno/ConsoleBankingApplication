@@ -3,10 +3,8 @@ package org.das.dao;
 import org.das.model.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import java.util.Collection;
-import java.util.Map;
-import java.util.Optional;
-import java.util.UUID;
+
+import java.util.*;
 
 @Component
 public class AccountDao {
@@ -22,8 +20,8 @@ public class AccountDao {
         return account;
     }
 
-    public Collection<Account> getAccount() {
-        return accounts.values();
+    public ArrayList<Account> getAccounts() {
+        return new ArrayList<>(accounts.values());
     }
 
     public Optional<Account> getAccount(UUID id) {
