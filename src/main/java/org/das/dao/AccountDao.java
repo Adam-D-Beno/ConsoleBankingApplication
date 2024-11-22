@@ -19,8 +19,8 @@ public class AccountDao {
         return account;
     }
 
-    public Collection<Account> getAccounts() {
-        return accounts.values();
+    public Collection<Account> getAllAccounts() {
+       return accounts.values();
     }
 
     public Optional<Account> getAccount(UUID id) {
