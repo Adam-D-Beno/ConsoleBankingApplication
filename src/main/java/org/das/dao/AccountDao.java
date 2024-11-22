@@ -1,8 +1,6 @@
 package org.das.dao;
 
 import org.das.model.Account;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.Map;
@@ -21,7 +19,7 @@ public class AccountDao {
         return account;
     }
 
-    public Collection<Account> getAccounts() {
+    public Collection<Account> getAllAccounts() {
         return accounts.values();
     }
 
