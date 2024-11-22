@@ -7,6 +7,7 @@ import org.das.utils.AccountProperties;
 import org.das.validate.AccountValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.UUID;
@@ -30,9 +31,9 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account create(UUID userId) {
         Account newAccount = new Account(getRandomId(), userId);
-       if (isFirstAccount(newAccount.getAccountId())) {
-           newAccount.setMoneyAmount(BigDecimal.valueOf(accountProperties.getDefaultAmount()));
-       }
+        if (isFirstAccount(newAccount.getAccountId())) {
+            newAccount.setMoneyAmount(BigDecimal.valueOf(accountProperties.getDefaultAmount()));
+        }
         return accountDao.save(newAccount);
     }
 
@@ -79,10 +80,9 @@ public class AccountServiceImpl implements AccountService {
     }
 
     private boolean isOnlyAccount(UUID userId) {
-        return userDao.getUser(userId).stream()
-                .mapToInt(user -> user.getAccounts().size())
-                .anyMatch(count -> count <= 1);
-
+        return userDao.getUser(userId)
+                .map(user -> user.getAccounts().size() <= 1)
+                .orElse(true);
     }
 
     private boolean isFirstAccount(UUID userId) {
@@ -94,7 +94,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     private Account getAccount(UUID accountId) {
-      return accountDao.getAccount(accountId)
+        return accountDao.getAccount(accountId)
                 .orElseThrow(() -> new IllegalArgumentException("Account not exist id=%s".formatted(accountId)));
 
     }
