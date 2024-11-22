@@ -102,7 +102,7 @@ public class AccountServiceImpl implements AccountService {
     }
     // todo replace
     private boolean isOnlyAccount(UUID userId) {
-        return getAllUserAccounts(userId).isEmpty();
+        return getAllUserAccounts(userId).size() == 1;
     }
 
     private boolean isFirstAccount(UUID userId) {
