@@ -29,10 +29,12 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account create(UUID userId) {
         Account newAccount = new Account(getRandomId(), userId);
+        accountDao.save(newAccount);
+        //todo wich acc use
         if (isFirstAccount(newAccount.getAccountId())) {
             newAccount.setMoneyAmount(BigDecimal.valueOf(accountProperties.getDefaultAmount()));
         }
-        return accountDao.save(newAccount);
+        return newAccount;
     }
 
     @Override
@@ -98,9 +100,9 @@ public class AccountServiceImpl implements AccountService {
         BigDecimal commission = BigDecimal.valueOf(accountProperties.getTransferCommission());
         return amount.multiply(BigDecimal.ONE.subtract(commission)).setScale(2, RoundingMode.HALF_UP);
     }
-
+    // todo replace
     private boolean isOnlyAccount(UUID userId) {
-        return getAllUserAccounts(userId).size() <= 1;
+        return getAllUserAccounts(userId).isEmpty();
     }
 
     private boolean isFirstAccount(UUID userId) {
