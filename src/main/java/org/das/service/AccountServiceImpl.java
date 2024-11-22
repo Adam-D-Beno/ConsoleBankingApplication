@@ -106,5 +106,11 @@ public class AccountServiceImpl implements AccountService {
     private UUID getRandomId() {
         return UUID.randomUUID();
     }
+
+    private Account getAccount(UUID accountId) {
+        return accountDao.getAccount(accountId)
+                .orElseThrow(() -> new IllegalArgumentException("Account not exist id=%s".formatted(accountId)));
+
+    }
 }
 
