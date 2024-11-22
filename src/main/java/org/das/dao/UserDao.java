@@ -13,10 +13,6 @@ public class UserDao {
         this.users = new HashMap<>();
     }
 
-    public Optional<User> getUser(String login) {
-        return Optional.ofNullable(users.get(login));
-    }
-
     public Optional<User> getUser(UUID id) {
         return getUsers().stream().filter(user -> user.getUserId().equals(id)).findFirst();
     }
