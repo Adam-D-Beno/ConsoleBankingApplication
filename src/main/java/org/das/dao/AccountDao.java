@@ -3,7 +3,6 @@ package org.das.dao;
 import org.das.model.Account;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-
 import java.util.*;
 
 @Component
@@ -20,16 +19,12 @@ public class AccountDao {
         return account;
     }
 
-    public ArrayList<Account> getAccounts() {
-        return new ArrayList<>(accounts.values());
+    public Collection<Account> getAccounts() {
+        return accounts.values();
     }
 
     public Optional<Account> getAccount(UUID id) {
         return Optional.ofNullable(accounts.get(id));
-    }
-
-    public boolean accountExist(UUID id) {
-        return accounts.containsKey(id);
     }
 
     public void remove(UUID id) {
