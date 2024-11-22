@@ -1,7 +1,9 @@
 package org.das.service;
 
 import org.das.dao.AccountDao;
+import org.das.dao.UserDao;
 import org.das.model.Account;
+import org.das.model.User;
 import org.das.utils.AccountProperties;
 import org.das.validate.AccountValidation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,12 +31,11 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account create(UUID userId) {
         Account newAccount = new Account(getRandomId(), userId);
-        accountDao.save(newAccount);
         //todo wich acc use
-        if (isFirstAccount(newAccount.getAccountId())) {
+        if (isFirstAccount(newAccount.getUserId())) {
             newAccount.setMoneyAmount(BigDecimal.valueOf(accountProperties.getDefaultAmount()));
         }
-        return newAccount;
+        return  accountDao.save(newAccount);
     }
 
     @Override
@@ -102,7 +103,7 @@ public class AccountServiceImpl implements AccountService {
     }
     // todo replace
     private boolean isOnlyAccount(UUID userId) {
-        return getAllUserAccounts(userId).size() == 1;
+        return getAllUserAccounts(userId).isEmpty();
     }
 
     private boolean isFirstAccount(UUID userId) {
