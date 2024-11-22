@@ -1,13 +1,11 @@
 package org.das.service;
 
 import org.das.dao.AccountDao;
-import org.das.dao.UserDao;
 import org.das.model.Account;
 import org.das.utils.AccountProperties;
 import org.das.validate.AccountValidation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.List;
@@ -15,15 +13,14 @@ import java.util.UUID;
 
 @Service
 public class AccountServiceImpl implements AccountService {
-    private final UserDao userDao;
     private final AccountDao accountDao;
     private final AccountValidation accountValidation;
     private final AccountProperties accountProperties;
 
     @Autowired
-    public AccountServiceImpl(UserDao userDao, AccountDao accountDao,
-                              AccountValidation accountValidation, AccountProperties accountProperties) {
-        this.userDao = userDao;
+    public AccountServiceImpl(AccountDao accountDao,
+                              AccountValidation accountValidation,
+                              AccountProperties accountProperties) {
         this.accountDao = accountDao;
         this.accountValidation = accountValidation;
         this.accountProperties = accountProperties;
@@ -102,11 +99,8 @@ public class AccountServiceImpl implements AccountService {
         return amount.multiply(BigDecimal.ONE.subtract(commission)).setScale(2, RoundingMode.HALF_UP);
     }
 
-    //todo replace on accountDao....
     private boolean isOnlyAccount(UUID userId) {
-        return userDao.getUser(userId)
-                .map(user -> user.getAccounts().size() <= 1)
-                .orElse(true);
+        return getAllUserAccounts(userId).size() <= 1;
     }
 
     private boolean isFirstAccount(UUID userId) {
