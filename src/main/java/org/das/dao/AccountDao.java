@@ -22,11 +22,11 @@ public class AccountDao {
         return account;
     }
 
-    public Collection<Account> getAccounts() {
+    public Collection<Account> getAccount() {
         return accounts.values();
     }
 
-    public Optional<Account> getAccounts(UUID id) {
+    public Optional<Account> getAccount(UUID id) {
         return Optional.ofNullable(accounts.get(id));
     }
 
