@@ -35,8 +35,10 @@ public class ExecuteOperation {
         String userId = scanner.nextLine();
         userValidation.userLoginCorrect(userId);
         Account account = accountService.accountCreate(UUID.fromString(userId));
-        System.out.println("New account created with ID: " + account.getAccountId() +
-                userService.getUserById(account.getUserId()).get().getLogin());
+        User user = userService.getUserById(account.getUserId()).get();
+        user.addAccount(account);
+        System.out.println("New account created with ID =%s for user with id=%s"
+                .formatted(account.getAccountId(), user.getUserId()));
 
     }
 
