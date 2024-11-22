@@ -55,10 +55,10 @@ public class ApplicationConfiguration {
 
     @Bean
     public UserService userService(UserDao userDao,
-                                   AccountDao accountDao,
+
                                    AccountService accountService,
                                    UserValidation userValidation) {
-        return new UserServiceImpl(userDao, accountDao, accountService, userValidation);
+        return new UserServiceImpl(userDao, accountService, userValidation);
     }
 
     @Bean
