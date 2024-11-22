@@ -3,8 +3,7 @@ package org.das.service;
 import org.das.model.Account;
 import org.das.model.User;
 import org.das.validate.UserValidation;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
+
 import java.math.BigDecimal;
 import java.util.Scanner;
 import java.util.UUID;
@@ -27,7 +26,7 @@ public class ExecuteOperation {
         String login = scanner.nextLine();
         userValidation.userLoginCorrect(login);
         User user = userService.userCreate(login);
-        System.out.println("User created successfully " + user.toString());
+        System.out.println("User %s created successfully ".formatted(user));
     }
 
     public void executeOperationsAccountCreate(Scanner scanner) {
@@ -46,8 +45,13 @@ public class ExecuteOperation {
         System.out.println("Enter account ID to close: ");
         String accountId = scanner.nextLine();
         userValidation.userLoginCorrect(accountId);
-        accountService.accountClose(UUID.fromString(accountId));
-        System.out.println("Account with ID " + accountId + " has been closed.");
+        Account account = accountService.accountClose(UUID.fromString(accountId));
+        User user = userService.getUserById(account.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("No such user with id=%s"
+                        .formatted(account.getUserId())));
+        user.getAccounts().remove(account);
+        System.out.println("Account with ID=%s fro user id=%s has been closed"
+                .formatted(account.getAccountId(), user.getUserId()));
     }
 
     public void executeOperationsAccountWithdraw(Scanner scanner) {
@@ -57,7 +61,7 @@ public class ExecuteOperation {
         System.out.println("Enter amount to withdraw: ");
         double amount = scanner.nextDouble();
         accountService.accountWithdraw(UUID.fromString(accountId), BigDecimal.valueOf(amount));
-        System.out.println("Amount " + amount + " withdraw to account ID: " + accountId);
+        System.out.println("Amount %s withdraw to account ID=%s ".formatted(amount, accountId));
     }
 
     public void executeOperationsAccountDeposit(Scanner scanner) {
@@ -67,20 +71,21 @@ public class ExecuteOperation {
         System.out.println("Enter amount to deposit: ");
         double amount = scanner.nextDouble();
         accountService.accountDeposit(UUID.fromString(accountId), BigDecimal.valueOf(amount));
-        System.out.println("Amount " + amount + " deposited to account ID: " + accountId);
+        System.out.println("Amount %s deposit to account ID=%s ".formatted(amount, accountId));
     }
 
     public void executeOperationsAccountTransfer(Scanner scanner) {
         System.out.println("Enter source account ID: ");
-        String source = scanner.nextLine();
-        userValidation.userLoginCorrect(source);
+        String accountIdFrom = scanner.nextLine();
+        userValidation.userLoginCorrect(accountIdFrom);
         System.out.println("Enter target account ID: ");
-        String target = scanner.nextLine();
-        userValidation.userLoginCorrect(target);
+        String accountIdTo = scanner.nextLine();
+        userValidation.userLoginCorrect(accountIdTo);
         System.out.println("Enter amount to transfer: ");
         double amount = scanner.nextDouble();
-        accountService.accountTransfer(UUID.fromString(source), UUID.fromString(target), BigDecimal.valueOf(amount));
-        System.out.println(" Amount " + amount + " transferred from account ID " + source + " to account ID " + target);
+        accountService.accountTransfer(UUID.fromString(accountIdFrom), UUID.fromString(accountIdTo), BigDecimal.valueOf(amount));
+        System.out.println("Amount %s transferred from account ID =%s to account ID =%s"
+                .formatted(amount, accountIdFrom, accountIdTo));
     }
 
     public void showAllUsers() {
