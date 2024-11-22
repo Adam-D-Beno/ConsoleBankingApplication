@@ -1,5 +1,6 @@
 package org.das.service;
 
+import org.das.dao.AccountDao;
 import org.das.dao.UserDao;
 import org.das.model.Account;
 import org.das.model.User;
@@ -13,13 +14,15 @@ import java.util.UUID;
 
 public class UserServiceImpl implements UserService {
     private final UserDao userDao;
+    private final AccountDao accountDao;
     private final AccountService accountService;
     private final UserValidation userValidation;
 
-    public UserServiceImpl(UserDao userDao,
+    public UserServiceImpl(UserDao userDao, AccountDao accountDao,
                            AccountService accountService,
                            UserValidation userValidation) {
         this.userDao = userDao;
+        this.accountDao = accountDao;
         this.accountService = accountService;
         this.userValidation = userValidation;
     }
@@ -30,7 +33,9 @@ public class UserServiceImpl implements UserService {
         userValidation.userAlreadyExist(login);
         User newUser = new User(getRandomId(), login, new ArrayList<>());
         userDao.saveUser(newUser);
-        newUser.addAccount(accountService.accountCreate(newUser.getUserId()));
+        Account newAccount = accountService.accountCreate(newUser.getUserId());
+        accountDao.save(newAccount);
+        newUser.addAccount(newAccount);
         return newUser;
     }
 
