@@ -3,6 +3,7 @@ package org.das.service;
 import org.das.dao.AccountDao;
 import org.das.dao.UserDao;
 import org.das.model.Account;
+import org.das.model.User;
 import org.das.utils.AccountProperties;
 import org.das.validate.AccountValidation;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
@@ -96,7 +98,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     private boolean hasNoAccounts(Account account) {
-               return userDao.getUsers().stream()
+        return userDao.getUsers().stream()
     .filter(user -> user.getUserId().equals(account.getUserId()))
     .anyMatch(user -> user.getAccounts().isEmpty());
     }
