@@ -19,7 +19,10 @@ public class CloseAccountCommand implements OperationCommand {
     private final Scanner scanner;
 
     @Autowired
-    public CloseAccountCommand(UserValidation userValidation, AccountService accountService, UserService userService, Scanner scanner) {
+    public CloseAccountCommand(UserValidation userValidation,
+                               AccountService accountService,
+                               UserService userService,
+                               Scanner scanner) {
         this.userValidation = userValidation;
         this.accountService = accountService;
         this.userService = userService;
@@ -33,7 +36,8 @@ public class CloseAccountCommand implements OperationCommand {
         userValidation.userLoginCorrect(accountId);
         Account account = accountService.close(UUID.fromString(accountId));
         User user = userService.getUserById(account.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("No such user with id=%s".formatted(account.getUserId())));
+                .orElseThrow(() -> new IllegalArgumentException("No such user with id=%s"
+                        .formatted(account.getUserId())));
         user.getAccounts().remove(account);
         System.out.println("Account with ID=%s fro user id=%s has been closed"
                 .formatted(account.getAccountId(), user.getUserId()));
