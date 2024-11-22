@@ -39,11 +39,8 @@ public class AccountServiceImpl implements AccountService {
 
     @Override
     public Account accountClose(UUID accountId) {
-         Account account = accountDao.getAccounts()
-                .stream()
-                .filter(findAccount -> findAccount.getAccountId().equals(accountId))
-                .findFirst()
-                .orElseThrow(() -> new RuntimeException("No such account: id=%s".formatted(accountId)));
+        Account account = accountDao.getAccount(accountId)
+                .orElseThrow(() -> new IllegalArgumentException("No such account: id=%s".formatted(accountId)));
         if (hasNoAccounts(account)) {
             throw new IllegalArgumentException(("Account with id=%s cant delete, " +
                     "because user have only one account").formatted(accountId));
