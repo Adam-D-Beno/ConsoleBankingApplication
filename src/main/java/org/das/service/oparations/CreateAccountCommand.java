@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 import java.util.Scanner;
 import java.util.UUID;
 
+import static java.util.UUID.fromString;
+
 @Component
 public class CreateAccountCommand implements OperationCommand {
     private final UserValidation userValidation;
@@ -41,7 +43,13 @@ public class CreateAccountCommand implements OperationCommand {
         System.out.println("Enter the user id for which to create an account: ");
         String userId = scanner.nextLine();
         userValidation.userLoginCorrect(userId);
-        User user = userService.getUserById(UUID.fromString(userId))
+        UUID uuid;
+        try {
+            uuid = fromString(userId);
+        } catch (Exception e) {
+            throw new IllegalArgumentException("wrong input user id " +e.getMessage());
+        }
+        User user = userService.getUserById(uuid)
                 .orElseThrow(() -> new IllegalArgumentException("No such user with id%s"
                         .formatted(userId)));
         Account account = accountService.create(user.getUserId());
