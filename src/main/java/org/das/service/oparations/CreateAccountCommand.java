@@ -41,8 +41,10 @@ public class CreateAccountCommand implements OperationCommand {
         System.out.println("Enter the user id for which to create an account: ");
         String userId = scanner.nextLine();
         userValidation.userLoginCorrect(userId);
-        Account account = accountService.create(UUID.fromString(userId));
-        User user = userService.getUserById(account.getUserId()).get();
+        User user = userService.getUserById(UUID.fromString(userId))
+                .orElseThrow(() -> new IllegalArgumentException("No such user with id%s"
+                        .formatted(userId)));
+        Account account = accountService.create(user.getUserId());
         user.addAccount(account);
         System.out.println("New account created with ID =%s for user with id=%s"
                 .formatted(account.getAccountId(), user.getUserId()));
