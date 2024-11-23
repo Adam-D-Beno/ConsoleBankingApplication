@@ -29,10 +29,11 @@ public class AccountServiceImpl implements AccountService {
     @Override
     public Account create(UUID userId) {
         Account newAccount = new Account(getRandomId(), userId);
+        accountDao.save(newAccount);
         if (isFirstAccount(newAccount.getUserId())) {
             newAccount.setMoneyAmount(BigDecimal.valueOf(accountProperties.getDefaultAmount()));
         }
-        return  accountDao.save(newAccount);
+        return  newAccount;
     }
 
     @Override
@@ -100,7 +101,7 @@ public class AccountServiceImpl implements AccountService {
     }
 
     private boolean isOnlyAccount(UUID userId) {
-        return getAllUserAccounts(userId).isEmpty();
+        return getAllUserAccounts(userId).size() == 1;
     }
 
     private boolean isFirstAccount(UUID userId) {
