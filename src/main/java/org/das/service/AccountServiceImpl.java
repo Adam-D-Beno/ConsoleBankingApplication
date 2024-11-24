@@ -12,14 +12,12 @@ import java.util.List;
 import java.util.UUID;
 
 public class AccountServiceImpl implements AccountService {
-    private final UserDao userDao;
     private final AccountDao accountDao;
     private final AccountValidation accountValidation;
    private final AccountProperties accountProperties;
 
-    public AccountServiceImpl(UserDao userDao, AccountDao accountDao,
+    public AccountServiceImpl(AccountDao accountDao,
                               AccountValidation accountValidation, AccountProperties accountProperties) {
-        this.userDao = userDao;
         this.accountDao = accountDao;
         this.accountValidation = accountValidation;
         this.accountProperties = accountProperties;
