@@ -1,7 +1,6 @@
 package org.das.service;
 
 import org.das.dao.AccountDao;
-import org.das.dao.UserDao;
 import org.das.model.Account;
 import org.das.utils.AccountProperties;
 import org.das.validate.AccountValidation;
