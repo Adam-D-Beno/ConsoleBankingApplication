@@ -45,12 +45,12 @@ public class ApplicationConfiguration {
     }
 
     @Bean
-    public AccountService accountService(UserDao userDao,
+    public AccountService accountService(
                                          AccountDao accountDao,
                                          AccountValidation accountValidation,
                                          AccountProperties accountProperties
     ) {
-        return new AccountServiceImpl(userDao, accountDao, accountValidation, accountProperties);
+        return new AccountServiceImpl(accountDao, accountValidation, accountProperties);
     }
 
     @Bean
